@@ -22,12 +22,26 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  bool _rememberMe = true;
+  bool _obscurePassword = true;
+
   late final Animation<double> _headingFade;
   late final Animation<Offset> _headingSlide;
   late final Animation<double> _cardFade;
   late final Animation<Offset> _cardSlide;
   late final Animation<double> _taglineFade;
   late final Animation<Offset> _taglineSlide;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = Get.put(IntroAnimController(), tag: 'login');
+    _headingFade = _controller.intervalAnimation(0.28, 0.58);
+    _headingSlide = _controller.slideAnimation(0.28, 0.58, offset: const Offset(0, 0.18));
+    _cardFade = _controller.intervalAnimation(0.44, 0.9);
+    _cardSlide = _controller.slideAnimation(0.44, 0.9, offset: const Offset(0, 0.28));
+    _taglineFade = _controller.intervalAnimation(0.72, 1);
+    _taglineSlide = _controller.slideAnimation(0.72, 1, offset: const Offset(0, 0.22));
 
   @override
   void initState() {
@@ -90,7 +104,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: const GlowingIconBadge(icon: Icons.lock_outline_rounded),
                           ),
                         ),
-                        const SizedBox(height: 24),
+                        const SizedBox(height: 26),
                         FadeTransition(
                           opacity: _headingFade,
                           child: SlideTransition(
@@ -98,16 +112,16 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: Column(
                               children: [
                                 Text(
-                                  'Welcome Back!',
+                                  'Welcome back',
                                   style: GoogleFonts.poppins(
-                                    fontSize: 24,
+                                    fontSize: 26,
                                     fontWeight: FontWeight.w600,
                                     color: const Color(0xFF2E6D63),
                                   ),
                                 ),
                                 const SizedBox(height: 6),
                                 Text(
-                                  'Login to continue your journey',
+                                  'Log in to continue your craft journey',
                                   style: GoogleFonts.poppins(
                                     fontSize: 13.5,
                                     color: const Color(0xFF6D8781),
@@ -117,7 +131,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                         ),
-                        const SizedBox(height: 26),
+                        const SizedBox(height: 28),
                         FadeTransition(
                           opacity: _cardFade,
                           child: SlideTransition(
@@ -125,7 +139,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: _buildLoginCard(context),
                           ),
                         ),
-                        const SizedBox(height: 22),
+                        const SizedBox(height: 24),
                         FadeTransition(
                           opacity: _controller.ctaFade,
                           child: SlideTransition(
@@ -174,17 +188,39 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _buildLoginCard(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+      padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 26),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(26),
+        borderRadius: BorderRadius.circular(28),
         boxShadow: const [
-          BoxShadow(color: Color(0x1A000000), blurRadius: 26, offset: Offset(0, 22)),
+          BoxShadow(color: Color(0x1A000000), blurRadius: 28, offset: Offset(0, 22)),
         ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(18),
+              gradient: const LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [Color(0xFF2CB9A8), Color(0xFFE47D5C)],
+              ),
+            ),
+            child: Row(
+              children: [
+                const Icon(Icons.lightbulb_outline_rounded, color: Colors.white, size: 18),
+                const SizedBox(width: 8),
+                Text(
+                  'Let’s sign you in',
+                  style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.w600),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 20),
           _buildToggle(),
           const SizedBox(height: 20),
           TextField(
@@ -195,33 +231,96 @@ class _LoginScreenState extends State<LoginScreen> {
               icon: _selectedMode == 0 ? Icons.mail_outline_rounded : Icons.phone_rounded,
             ),
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 16),
           TextField(
             controller: _passwordController,
-            obscureText: true,
+            obscureText: _obscurePassword,
             decoration: _inputDecoration(
               hint: 'Enter Password',
               icon: Icons.lock_outline_rounded,
-            ),
-          ),
-          const SizedBox(height: 10),
-          Align(
-            alignment: Alignment.centerRight,
-            child: TextButton(
-              onPressed: () {},
-              style: TextButton.styleFrom(foregroundColor: const Color(0xFF2E6D63)),
-              child: Text(
-                'Forgot Password?',
-                style: GoogleFonts.poppins(fontWeight: FontWeight.w500),
+              suffix: IconButton(
+                onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                icon: Icon(_obscurePassword ? Icons.visibility_off_rounded : Icons.visibility_rounded,
+                    color: const Color(0xFF7A928C)),
               ),
             ),
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              GestureDetector(
+                onTap: () => setState(() => _rememberMe = !_rememberMe),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 220),
+                  curve: Curves.easeOutCubic,
+                  width: 22,
+                  height: 22,
+                  decoration: BoxDecoration(
+                    color: _rememberMe ? const Color(0xFF2CB9A8) : const Color(0xFFE7EAEA),
+                    borderRadius: BorderRadius.circular(6),
+                    boxShadow: _rememberMe
+                        ? const [BoxShadow(color: Color(0x1A2CB9A8), blurRadius: 12, offset: Offset(0, 6))]
+                        : null,
+                  ),
+                  child: _rememberMe
+                      ? const Icon(Icons.check, size: 14, color: Colors.white)
+                      : null,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  'Remember me',
+                  style: GoogleFonts.poppins(
+                    color: const Color(0xFF4D756F),
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+              TextButton(
+                onPressed: () {},
+                style: TextButton.styleFrom(foregroundColor: const Color(0xFF2E6D63)),
+                child: Text(
+                  'Forgot Password?',
+                  style: GoogleFonts.poppins(fontWeight: FontWeight.w600),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 18),
           GradientButton(
             label: 'Login',
             onTap: () {},
             expand: true,
             padding: const EdgeInsets.symmetric(vertical: 16),
+          ),
+          const SizedBox(height: 20),
+          Row(
+            children: [
+              Expanded(child: _DividerLabel(color: Colors.grey.shade300)),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                child: Text(
+                  'or continue with',
+                  style: GoogleFonts.poppins(
+                    fontSize: 12,
+                    color: const Color(0xFF93A5A0),
+                  ),
+                ),
+              ),
+              Expanded(child: _DividerLabel(color: Colors.grey.shade300)),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const [
+              _SocialButton(icon: Icons.g_mobiledata_rounded),
+              SizedBox(width: 14),
+              _SocialButton(icon: Icons.apple),
+              SizedBox(width: 14),
+              _SocialButton(icon: Icons.facebook),
+            ],
           ),
         ],
       ),
@@ -282,16 +381,67 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  InputDecoration _inputDecoration({required String hint, required IconData icon}) {
+  InputDecoration _inputDecoration({required String hint, required IconData icon, Widget? suffix}) {
     return InputDecoration(
       hintText: hint,
       hintStyle: GoogleFonts.poppins(color: const Color(0xFF9AA7A3), fontSize: 13),
       prefixIcon: Icon(icon, color: const Color(0xFF2E6D63)),
+      suffixIcon: suffix,
       filled: true,
       fillColor: const Color(0xFFF5F6F7),
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(18),
         borderSide: BorderSide.none,
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(18),
+        borderSide: const BorderSide(color: Color(0xFF2CB9A8), width: 1.4),
+      ),
+    );
+  }
+}
+
+class _DividerLabel extends StatelessWidget {
+  final Color color;
+  const _DividerLabel({required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 1,
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(1),
+      ),
+    );
+  }
+}
+
+class _SocialButton extends StatelessWidget {
+  final IconData icon;
+  const _SocialButton({required this.icon});
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(16),
+      elevation: 0,
+      child: InkWell(
+        onTap: () {},
+        borderRadius: BorderRadius.circular(16),
+        child: Ink(
+          width: 52,
+          height: 52,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: const [
+              BoxShadow(color: Color(0x15000000), blurRadius: 18, offset: Offset(0, 12)),
+            ],
+            color: Colors.white,
+          ),
+          child: Icon(icon, color: const Color(0xFF2E6D63), size: 28),
+        ),
       ),
     );
   }
