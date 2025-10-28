@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 import 'routes.dart';
 
 void main() {
@@ -14,7 +15,9 @@ class HunarHubApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      
+      title: 'Hunar Hub',
+      initialRoute: AppRoutes.onboarding,
+      getPages: AppPages.pages,
       theme: ThemeData(
         scaffoldBackgroundColor: const Color(0xFFF7F1E7),
         textTheme: GoogleFonts.poppinsTextTheme(),
