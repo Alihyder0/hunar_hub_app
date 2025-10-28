@@ -43,6 +43,16 @@ class _LoginScreenState extends State<LoginScreen> {
     _taglineFade = _controller.intervalAnimation(0.72, 1);
     _taglineSlide = _controller.slideAnimation(0.72, 1, offset: const Offset(0, 0.22));
 
+  @override
+  void initState() {
+    super.initState();
+    _controller = Get.put(IntroAnimController(), tag: 'login');
+    _headingFade = _controller.intervalAnimation(0.32, 0.6);
+    _headingSlide = _controller.slideAnimation(0.32, 0.6);
+    _cardFade = _controller.intervalAnimation(0.48, 0.85);
+    _cardSlide = _controller.slideAnimation(0.48, 0.9, offset: const Offset(0, 0.26));
+    _taglineFade = _controller.intervalAnimation(0.72, 1);
+    _taglineSlide = _controller.slideAnimation(0.72, 1, offset: const Offset(0, 0.22));
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _controller.playIn(showBack: true);
     });
