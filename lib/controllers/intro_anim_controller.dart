@@ -19,6 +19,8 @@ class IntroAnimController extends GetxController with GetTickerProviderStateMixi
   late final Animation<Offset> subheadingSlide;
   late final Animation<double> chipsFade;
   late final Animation<Offset> chipsSlide;
+  late final Animation<double> badgeFade;
+  late final Animation<double> badgeScale;
   late final Animation<double> ctaFade;
   late final Animation<Offset> ctaSlide;
   late final Animation<double> statsFade;
@@ -32,7 +34,7 @@ class IntroAnimController extends GetxController with GetTickerProviderStateMixi
   }) {
     backCtrl = AnimationController(vsync: this, duration: backDuration);
     backFade = CurvedAnimation(parent: backCtrl, curve: Curves.easeOut);
-    backSlide = Tween<Offset>(begin: const Offset(-0.4, 0), end: Offset.zero)
+    backSlide = Tween<Offset>(begin: const Offset(-1.05, 0), end: Offset.zero)
         .animate(CurvedAnimation(parent: backCtrl, curve: Curves.easeOutCubic));
 
     logoCtrl = AnimationController(vsync: this, duration: logoDuration);
@@ -51,6 +53,10 @@ class IntroAnimController extends GetxController with GetTickerProviderStateMixi
     chipsFade = _interval(0.32, 0.7);
     chipsSlide = _slideInterval(0.32, 0.7, offset: const Offset(0, 0.18));
 
+    badgeFade = _interval(0.24, 0.5);
+    badgeScale = Tween<double>(begin: 0.76, end: 1)
+        .animate(CurvedAnimation(parent: contentCtrl, curve: const Interval(0.24, 0.5, curve: Curves.easeOutBack)));
+
     ctaFade = _interval(0.55, 0.85);
     ctaSlide = _slideInterval(0.55, 0.85, offset: const Offset(0, 0.22));
 
@@ -60,11 +66,17 @@ class IntroAnimController extends GetxController with GetTickerProviderStateMixi
 
   /// call to start animations in sequence
   Future<void> playIn({bool showBack = false}) async {
-    if (showBack) backCtrl.forward();
-    await logoCtrl.forward();
-    // slight overlap for nicer feel
+    if (showBack) {
+      backCtrl.forward(from: 0);
+      await Future.delayed(const Duration(milliseconds: 180));
+    }
     await Future.wait([
-      contentCtrl.forward(),
+      logoCtrl.forward(from: 0),
+      // stagger the rest of the content slightly after the logo flip
+      () async {
+        await Future.delayed(const Duration(milliseconds: 200));
+        await contentCtrl.forward(from: 0);
+      }(),
     ]);
   }
 

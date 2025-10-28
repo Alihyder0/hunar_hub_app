@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../controllers/intro_anim_controller.dart';
 import '../widgets/animated_back_button.dart';
+import '../widgets/glowing_icon_badge.dart';
 import '../widgets/gradient_button.dart';
 import '../widgets/logo_flip.dart';
 import '../widgets/soft_background.dart';
@@ -21,11 +22,23 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  late final Animation<double> _headingFade;
+  late final Animation<Offset> _headingSlide;
+  late final Animation<double> _cardFade;
+  late final Animation<Offset> _cardSlide;
+  late final Animation<double> _taglineFade;
+  late final Animation<Offset> _taglineSlide;
 
   @override
   void initState() {
     super.initState();
     _controller = Get.put(IntroAnimController(), tag: 'login');
+    _headingFade = _controller.intervalAnimation(0.32, 0.6);
+    _headingSlide = _controller.slideAnimation(0.32, 0.6);
+    _cardFade = _controller.intervalAnimation(0.48, 0.85);
+    _cardSlide = _controller.slideAnimation(0.48, 0.9, offset: const Offset(0, 0.26));
+    _taglineFade = _controller.intervalAnimation(0.72, 1);
+    _taglineSlide = _controller.slideAnimation(0.72, 1, offset: const Offset(0, 0.22));
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _controller.playIn(showBack: true);
     });
@@ -69,11 +82,19 @@ class _LoginScreenState extends State<LoginScreen> {
                       children: [
                         const SizedBox(height: 16),
                         LogoFlip(controller: _controller, size: 104),
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 22),
                         FadeTransition(
-                          opacity: _controller.headingFade,
+                          opacity: _controller.badgeFade,
+                          child: ScaleTransition(
+                            scale: _controller.badgeScale,
+                            child: const GlowingIconBadge(icon: Icons.lock_outline_rounded),
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+                        FadeTransition(
+                          opacity: _headingFade,
                           child: SlideTransition(
-                            position: _controller.headingSlide,
+                            position: _headingSlide,
                             child: Column(
                               children: [
                                 Text(
@@ -96,11 +117,11 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                         ),
-                        const SizedBox(height: 22),
+                        const SizedBox(height: 26),
                         FadeTransition(
-                          opacity: _controller.contentFade,
+                          opacity: _cardFade,
                           child: SlideTransition(
-                            position: _controller.contentSlide,
+                            position: _cardSlide,
                             child: _buildLoginCard(context),
                           ),
                         ),
@@ -122,9 +143,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                         FadeTransition(
-                          opacity: _controller.statsFade,
+                          opacity: _taglineFade,
                           child: SlideTransition(
-                            position: _controller.statsSlide,
+                            position: _taglineSlide,
                             child: Padding(
                               padding: const EdgeInsets.only(top: 12.0),
                               child: Text(
