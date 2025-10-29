@@ -1,8 +1,9 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../routes.dart';
-import '../widgets/animated_page_indicator.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -12,163 +13,362 @@ class OnboardingScreen extends StatefulWidget {
 }
 
 class _OnboardingScreenState extends State<OnboardingScreen>
-    with SingleTickerProviderStateMixin {
-  final _pageController = PageController();
-  int _currentPage = 0;
-  late final AnimationController _ctaController;
-  late final Animation<double> _ctaAnimation;
+    with TickerProviderStateMixin {
+  late final AnimationController _iconController;
+  late final AnimationController _contentController;
+  late final Animation<double> _iconFlip;
+  late final Animation<double> _headlineOpacity;
+  late final Animation<Offset> _headlineOffset;
+  late final Animation<double> _descriptionOpacity;
+  late final Animation<Offset> _descriptionOffset;
+  late final Animation<double> _topicsOpacity;
+  late final Animation<Offset> _topicsOffset;
+  late final Animation<double> _ctaOpacity;
+  late final Animation<Offset> _ctaOffset;
+  late final Animation<double> _statsOpacity;
+  late final Animation<Offset> _statsOffset;
 
-  final _pages = const [
-    _OnboardingData(
-      title: 'Design your next big idea',
-      description:
-          'Discover curated lessons, motion references, and ready-to-use design kits crafted by leading creatives.',
-      accentColor: Color(0xFF2AB1A6),
-      gradient: [Color(0xFF2AB1A6), Color(0xFF6BE3D3)],
-      icon: Icons.bolt_rounded,
-    ),
-    _OnboardingData(
-      title: 'Collaborate with mentors',
-      description:
-          'Book live critiques, share prototypes, and receive actionable feedback through immersive sessions.',
-      accentColor: Color(0xFFFCB62B),
-      gradient: [Color(0xFFFCB62B), Color(0xFFFFE6A4)],
-      icon: Icons.group_work_rounded,
-    ),
-    _OnboardingData(
-      title: 'Launch stunning experiences',
-      description:
-          'Craft polished handoffs, export animation specs, and bring pixel-perfect experiences to market.',
-      accentColor: Color(0xFF5C5BEB),
-      gradient: [Color(0xFF5C5BEB), Color(0xFFA29BFE)],
-      icon: Icons.auto_awesome_rounded,
-    ),
+  final _topics = const [
+    'Cooking',
+    'Embroidery',
+    'Repair & Tools',
+    'Arts',
+    'Jewel Making',
+    'Handicrafts',
   ];
 
   @override
   void initState() {
     super.initState();
-    _ctaController = AnimationController(
+    _iconController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 650),
+      duration: const Duration(milliseconds: 1000),
     );
-    _ctaAnimation = CurvedAnimation(
-      parent: _ctaController,
-      curve: Curves.easeOutBack,
+    _contentController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1400),
     );
-    _pageController.addListener(() {
-      final page = _pageController.page?.round() ?? 0;
-      if (page != _currentPage) {
-        setState(() => _currentPage = page);
-        _ctaController
-          ..reset()
-          ..forward();
-      }
-    });
-    _ctaController.forward();
+
+    _iconFlip = Tween<double>(
+      begin: -math.pi / 2,
+      end: 0,
+    ).animate(
+      CurvedAnimation(
+        parent: _iconController,
+        curve: Curves.easeOutBack,
+      ),
+    );
+
+    _headlineOpacity = CurvedAnimation(
+      parent: _contentController,
+      curve: const Interval(0.0, 0.35, curve: Curves.easeOut),
+    );
+    _headlineOffset = Tween<Offset>(
+      begin: const Offset(0, 0.2),
+      end: Offset.zero,
+    ).animate(
+      CurvedAnimation(
+        parent: _contentController,
+        curve: const Interval(0.0, 0.35, curve: Curves.easeOutCubic),
+      ),
+    );
+
+    _descriptionOpacity = CurvedAnimation(
+      parent: _contentController,
+      curve: const Interval(0.15, 0.45, curve: Curves.easeOut),
+    );
+    _descriptionOffset = Tween<Offset>(
+      begin: const Offset(0, 0.2),
+      end: Offset.zero,
+    ).animate(
+      CurvedAnimation(
+        parent: _contentController,
+        curve: const Interval(0.15, 0.45, curve: Curves.easeOutCubic),
+      ),
+    );
+
+    _topicsOpacity = CurvedAnimation(
+      parent: _contentController,
+      curve: const Interval(0.3, 0.65, curve: Curves.easeOut),
+    );
+    _topicsOffset = Tween<Offset>(
+      begin: const Offset(0, 0.2),
+      end: Offset.zero,
+    ).animate(
+      CurvedAnimation(
+        parent: _contentController,
+        curve: const Interval(0.3, 0.65, curve: Curves.easeOutCubic),
+      ),
+    );
+
+    _ctaOpacity = CurvedAnimation(
+      parent: _contentController,
+      curve: const Interval(0.5, 0.85, curve: Curves.easeOut),
+    );
+    _ctaOffset = Tween<Offset>(
+      begin: const Offset(0, 0.25),
+      end: Offset.zero,
+    ).animate(
+      CurvedAnimation(
+        parent: _contentController,
+        curve: const Interval(0.5, 0.85, curve: Curves.easeOutCubic),
+      ),
+    );
+
+    _statsOpacity = CurvedAnimation(
+      parent: _contentController,
+      curve: const Interval(0.65, 1.0, curve: Curves.easeOut),
+    );
+    _statsOffset = Tween<Offset>(
+      begin: const Offset(0, 0.2),
+      end: Offset.zero,
+    ).animate(
+      CurvedAnimation(
+        parent: _contentController,
+        curve: const Interval(0.65, 1.0, curve: Curves.easeOutCubic),
+      ),
+    );
+
+    _iconController.forward();
+    _contentController.forward();
   }
 
   @override
   void dispose() {
-    _pageController.dispose();
-    _ctaController.dispose();
+    _iconController.dispose();
+    _contentController.dispose();
     super.dispose();
   }
 
-  void _handleContinue() {
-    if (_currentPage == _pages.length - 1) {
-      Get.offAllNamed(AppRoutes.home);
-    } else {
-      _pageController.nextPage(
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.easeOutCubic,
-      );
-    }
+  void _handleGetStarted() {
+    _iconController
+        .reverse()
+        .then((_) => _iconController.forward()); // playful repeat
+    Get.toNamed(AppRoutes.login);
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
     return Scaffold(
-      body: AnimatedContainer(
-        duration: const Duration(milliseconds: 450),
-        curve: Curves.easeInOut,
-        decoration: BoxDecoration(
+      body: Container(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: _pages[_currentPage].gradient,
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+            colors: [Color(0xFFF9E7D8), Color(0xFFFDF6EE)],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
           ),
         ),
         child: SafeArea(
-          child: Column(
-            children: [
-              Align(
-                alignment: Alignment.topRight,
-                child: TextButton(
-                  onPressed: () => Get.offAllNamed(AppRoutes.home),
-                  style: TextButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    textStyle: theme.textTheme.labelLarge?.copyWith(
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 0.8,
-                    ),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return SingleChildScrollView(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: math.max(0, constraints.maxHeight - 48),
                   ),
-                  child: const Text('Skip'),
-                ),
-              ),
-              Expanded(
-                child: PageView.builder(
-                  controller: _pageController,
-                  physics: const BouncingScrollPhysics(),
-                  itemCount: _pages.length,
-                  itemBuilder: (context, index) {
-                    final page = _pages[index];
-                    final progress = (_pageController.hasClients
-                            ? (_pageController.page ?? 0)
-                            : 0) -
-                        index;
-                    return _OnboardingSlide(
-                      data: page,
-                      progress: progress,
-                    );
-                  },
-                ),
-              ),
-              const SizedBox(height: 24),
-              AnimatedPageIndicator(
-                length: _pages.length,
-                activeIndex: _currentPage,
-                activeColor: Colors.white,
-              ),
-              const SizedBox(height: 24),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                child: ScaleTransition(
-                  scale: _ctaAnimation,
-                  child: SizedBox(
-                    width: double.infinity,
-                    height: 56,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        foregroundColor: _pages[_currentPage].accentColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18),
-                        ),
-                        textStyle: theme.textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.w600,
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 36),
+                      AnimatedBuilder(
+                        animation: _iconFlip,
+                        builder: (context, child) {
+                          final value = _iconFlip.value;
+                          return Transform(
+                            alignment: Alignment.center,
+                            transform: Matrix4.identity()
+                              ..setEntry(3, 2, 0.001)
+                              ..rotateY(value),
+                            child: child,
+                          );
+                        },
+                        child: Hero(
+                          tag: 'app-icon',
+                          child: Container(
+                            height: 120,
+                            width: 120,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(32),
+                              gradient: const LinearGradient(
+                                colors: [Color(0xFF2CB7A6), Color(0xFF48E0B3)],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Color(0x332AB1A6),
+                                  blurRadius: 24,
+                                  offset: Offset(0, 16),
+                                ),
+                              ],
+                            ),
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                Container(
+                                  height: 82,
+                                  width: 82,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(24),
+                                  ),
+                                  child: const Icon(
+                                    Icons.fiber_manual_record_outlined,
+                                    size: 56,
+                                    color: Color(0xFF2CB7A6),
+                                  ),
+                                ),
+                                const Icon(
+                                  Icons.gps_fixed_rounded,
+                                  size: 40,
+                                  color: Color(0xFFFA7D52),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
-                      onPressed: _handleContinue,
-                      child: Text(
-                        _currentPage == _pages.length - 1 ? 'Get started' : 'Next',
+                      const SizedBox(height: 32),
+                      FadeTransition(
+                        opacity: _headlineOpacity,
+                        child: SlideTransition(
+                          position: _headlineOffset,
+                          child: Text(
+                            'Empower Your Skills',
+                            textAlign: TextAlign.center,
+                            style: theme.textTheme.headlineMedium?.copyWith(
+                              fontWeight: FontWeight.w700,
+                              color: const Color(0xFF2B2A42),
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
+                      const SizedBox(height: 16),
+                      FadeTransition(
+                        opacity: _descriptionOpacity,
+                        child: SlideTransition(
+                          position: _descriptionOffset,
+                          child: Text(
+                            'Learn traditional crafts, connect with expert trainers, and master the art of handmade excellence.',
+                            textAlign: TextAlign.center,
+                            style: theme.textTheme.bodyLarge?.copyWith(
+                              color: const Color(0xFF5D5B6A),
+                              height: 1.5,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      FadeTransition(
+                        opacity: _topicsOpacity,
+                        child: SlideTransition(
+                          position: _topicsOffset,
+                          child: Wrap(
+                            spacing: 12,
+                            runSpacing: 12,
+                            alignment: WrapAlignment.center,
+                            children: _topics
+                                .map(
+                                  (topic) => Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                      vertical: 10,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(22),
+                                      boxShadow: const [
+                                        BoxShadow(
+                                          color: Color(0x1A2AB1A6),
+                                          blurRadius: 12,
+                                          offset: Offset(0, 6),
+                                        ),
+                                      ],
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Container(
+                                          height: 6,
+                                          width: 6,
+                                          decoration: const BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: Color(0xFF2CB7A6),
+                                          ),
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Text(
+                                          topic,
+                                          style:
+                                              theme.textTheme.labelLarge?.copyWith(
+                                            color: const Color(0xFF2B2A42),
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                )
+                                .toList(),
+                          ),
+                        ),
+                      ),
+                      const Spacer(),
+                      FadeTransition(
+                        opacity: _ctaOpacity,
+                        child: SlideTransition(
+                          position: _ctaOffset,
+                          child: SizedBox(
+                            width: double.infinity,
+                            height: 58,
+                            child: ElevatedButton(
+                              onPressed: _handleGetStarted,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFF2CB7A6),
+                                foregroundColor: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                elevation: 6,
+                                textStyle: theme.textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: const [
+                                  Text('Get Started'),
+                                  SizedBox(width: 12),
+                                  Icon(Icons.arrow_forward_rounded),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 28),
+                      FadeTransition(
+                        opacity: _statsOpacity,
+                        child: SlideTransition(
+                          position: _statsOffset,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: const [
+                              _StatTile(label: 'Learners', value: '2.8K+'),
+                              _StatTile(label: 'Trainers', value: '150+'),
+                              _StatTile(label: 'Sessions', value: '5K+'),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ),
-            ],
+              );
+            },
           ),
         ),
       ),
@@ -176,120 +376,37 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   }
 }
 
-class _OnboardingSlide extends StatelessWidget {
-  const _OnboardingSlide({required this.data, required this.progress});
+class _StatTile extends StatelessWidget {
+  const _StatTile({
+    required this.label,
+    required this.value,
+  });
 
-  final _OnboardingData data;
-  final double progress;
+  final String label;
+  final String value;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final slideOffset = Tween<double>(begin: 40, end: 0)
-        .transform((1 - progress.abs()).clamp(0.0, 1.0));
-    final opacity = (1 - progress.abs()).clamp(0.0, 1.0);
-
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(24, 0, 24, 12),
-      child: Column(
-        children: [
-          Expanded(
-            child: TweenAnimationBuilder<double>(
-              tween: Tween(begin: 0.0, end: opacity),
-              duration: const Duration(milliseconds: 400),
-              curve: Curves.easeOutCubic,
-              builder: (context, value, child) {
-                return Opacity(
-                  opacity: value,
-                  child: Transform.translate(
-                    offset: Offset(0, slideOffset * (1 - value)),
-                    child: child,
-                  ),
-                );
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.15),
-                  borderRadius: BorderRadius.circular(36),
-                  border: Border.all(
-                    color: Colors.white.withOpacity(0.2),
-                    width: 1.4,
-                  ),
-                ),
-                child: Stack(
-                  children: [
-                    Align(
-                      alignment: const Alignment(0, -0.3),
-                      child: Icon(
-                        data.icon,
-                        size: 140,
-                        color: Colors.white,
-                      ),
-                    ),
-                    Align(
-                      alignment: const Alignment(0.85, 0.85),
-                      child: Container(
-                        width: 120,
-                        height: 120,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.white.withOpacity(0.18),
-                        ),
-                      ),
-                    ),
-                    Align(
-                      alignment: const Alignment(-0.85, 0.85),
-                      child: Container(
-                        width: 72,
-                        height: 72,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.white.withOpacity(0.12),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text(
+          value,
+          style: theme.textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.w700,
+            color: const Color(0xFF2B2A42),
           ),
-          const SizedBox(height: 32),
-          Text(
-            data.title,
-            textAlign: TextAlign.center,
-            style: theme.textTheme.headlineSmall?.copyWith(
-              color: Colors.white,
-              fontWeight: FontWeight.w700,
-              height: 1.2,
-            ),
+        ),
+        const SizedBox(height: 6),
+        Text(
+          label,
+          style: theme.textTheme.labelMedium?.copyWith(
+            color: const Color(0xFF85839B),
+            letterSpacing: 0.5,
           ),
-          const SizedBox(height: 16),
-          Text(
-            data.description,
-            textAlign: TextAlign.center,
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: Colors.white.withOpacity(0.85),
-              height: 1.5,
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
-}
-
-class _OnboardingData {
-  const _OnboardingData({
-    required this.title,
-    required this.description,
-    required this.accentColor,
-    required this.gradient,
-    required this.icon,
-  });
-
-  final String title;
-  final String description;
-  final Color accentColor;
-  final List<Color> gradient;
-  final IconData icon;
 }
