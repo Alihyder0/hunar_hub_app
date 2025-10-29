@@ -2,12 +2,10 @@ import 'package:get/get.dart';
 
 import 'screens/course_detail_screen.dart';
 import 'screens/home_screen.dart';
-import 'screens/login_screen.dart';
 import 'screens/onboarding_screen.dart';
 
 class AppRoutes {
   static const onboarding = '/';
-  static const login = '/login';
   static const home = '/home';
   static const courseDetails = '/course-details';
 }
@@ -19,12 +17,6 @@ class AppPages {
       page: () => const OnboardingScreen(),
       transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 500),
-    ),
-    GetPage(
-      name: AppRoutes.login,
-      page: () => const LoginScreen(),
-      transition: Transition.fadeIn,
-      transitionDuration: const Duration(milliseconds: 450),
     ),
     GetPage(
       name: AppRoutes.home,
