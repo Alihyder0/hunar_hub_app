@@ -130,7 +130,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                         index;
                     return _OnboardingSlide(
                       data: page,
-                      progress: progress,
+                      progress: progress.toDouble(),
                     );
                   },
                 ),
