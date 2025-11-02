@@ -2,6 +2,8 @@ import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../routes/app_routes.dart';
+
 class StudentVerificationController extends GetxController
     with GetTickerProviderStateMixin {
   late final AnimationController iconController;
@@ -82,7 +84,10 @@ class StudentVerificationController extends GetxController
       return;
     }
 
-    Get.snackbar('Success', 'Your email has been verified!');
+    Get.offNamed(
+      AppRoutes.profileCompletion,
+      arguments: {'email': email},
+    );
   }
 
   void resendCode() {

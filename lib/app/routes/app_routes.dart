@@ -4,4 +4,5 @@ abstract class AppRoutes {
   static const signupRole = '/signup-role';
   static const studentSignup = '/student-signup';
   static const studentVerification = '/student-verification';
+  static const profileCompletion = '/profile-completion';
 }
