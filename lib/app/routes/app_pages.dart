@@ -4,6 +4,8 @@ import '../modules/login/login_binding.dart';
 import '../modules/login/login_view.dart';
 import '../modules/onboarding/onboarding_binding.dart';
 import '../modules/onboarding/onboarding_view.dart';
+import '../modules/profile_completion/profile_completion_binding.dart';
+import '../modules/profile_completion/profile_completion_view.dart';
 import '../modules/signup_role/signup_role_binding.dart';
 import '../modules/signup_role/signup_role_view.dart';
 import '../modules/student_signup/student_signup_binding.dart';
@@ -38,6 +40,11 @@ class AppPages {
       name: AppRoutes.studentVerification,
       page: () => const StudentVerificationView(),
       binding: StudentVerificationBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.profileCompletion,
+      page: () => const ProfileCompletionView(),
+      binding: ProfileCompletionBinding(),
     ),
   ];
 }
