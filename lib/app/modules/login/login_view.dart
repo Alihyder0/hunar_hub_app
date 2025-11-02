@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../routes/app_routes.dart';
 import '../../theme/app_colors.dart';
 import '../../widgets/brand_tile.dart';
 import '../../widgets/login_text_field.dart';
@@ -157,21 +158,25 @@ class LoginView extends GetView<LoginController> {
                         start: 0.6,
                         end: 0.85,
                         child: Center(
-                          child: RichText(
-                            text: TextSpan(
-                              style: textTheme.bodyMedium?.copyWith(
-                                color: AppColors.textSecondary,
-                              ),
-                              children: const [
-                                TextSpan(text: "Don't have an account? "),
-                                TextSpan(
-                                  text: 'Sign Up',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    color: AppColors.textPrimary,
-                                  ),
+                          child: GestureDetector(
+                            onTap: () => Get.toNamed(AppRoutes.signupRole),
+                            behavior: HitTestBehavior.opaque,
+                            child: Text.rich(
+                              TextSpan(
+                                style: textTheme.bodyMedium?.copyWith(
+                                  color: AppColors.textSecondary,
                                 ),
-                              ],
+                                children: const [
+                                  TextSpan(text: "Don't have an account? "),
+                                  TextSpan(
+                                    text: 'Sign Up',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      color: AppColors.textPrimary,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
