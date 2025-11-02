@@ -224,7 +224,7 @@ class StudentSignupView extends GetView<StudentSignupController> {
                             child: SizedBox(
                               width: double.infinity,
                               child: FilledButton(
-                                onPressed: () {},
+                                onPressed: controller.continueToVerification,
                                 style: FilledButton.styleFrom(
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 18),

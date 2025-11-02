@@ -8,6 +8,8 @@ import '../modules/signup_role/signup_role_binding.dart';
 import '../modules/signup_role/signup_role_view.dart';
 import '../modules/student_signup/student_signup_binding.dart';
 import '../modules/student_signup/student_signup_view.dart';
+import '../modules/student_verification/student_verification_binding.dart';
+import '../modules/student_verification/student_verification_view.dart';
 import 'app_routes.dart';
 
 class AppPages {
@@ -31,6 +33,11 @@ class AppPages {
       name: AppRoutes.studentSignup,
       page: () => const StudentSignupView(),
       binding: StudentSignupBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.studentVerification,
+      page: () => const StudentVerificationView(),
+      binding: StudentVerificationBinding(),
     ),
   ];
 }

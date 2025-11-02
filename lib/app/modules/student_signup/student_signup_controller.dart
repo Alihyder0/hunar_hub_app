@@ -1,6 +1,8 @@
 import 'package:flutter/animation.dart';
 import 'package:get/get.dart';
 
+import '../../routes/app_routes.dart';
+
 class StudentSignupController extends GetxController
     with GetTickerProviderStateMixin {
   late final AnimationController iconController;
@@ -47,5 +49,11 @@ class StudentSignupController extends GetxController
     iconController.dispose();
     contentController.dispose();
     super.onClose();
+  }
+
+  void continueToVerification() {
+    if (!isClosed) {
+      Get.toNamed(AppRoutes.studentVerification);
+    }
   }
 }
