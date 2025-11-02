@@ -208,7 +208,7 @@ class SignupRoleView extends GetView<SignupRoleController> {
               );
             },
           ),
-        ],
+      )],
       ),
     );
   }

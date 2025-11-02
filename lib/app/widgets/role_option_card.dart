@@ -93,8 +93,8 @@ class RoleOptionCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 12),
-              ...benefits.map(
-                (benefit) => Padding(
+              for (final benefit in benefits)
+                Padding(
                   padding: const EdgeInsets.only(top: 6),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -121,11 +121,10 @@ class RoleOptionCard extends StatelessWidget {
                     ],
                   ),
                 ),
-              ),
             ],
           ),
         ),
       ),
-    );
+    ));
   }
 }
