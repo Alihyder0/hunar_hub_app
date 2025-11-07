@@ -987,14 +987,24 @@ class _NavBarItem extends StatelessWidget {
             children: [
               Icon(data.icon, color: iconColor, size: 24),
               const SizedBox(height: 6),
-              Text(
-                data.label,
-                style: textTheme.labelSmall?.copyWith(
-                  color: iconColor,
-                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-                  letterSpacing: 0.2,
+              SizedBox(
+                height: 16,
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    data.label,
+                    style: textTheme.labelSmall?.copyWith(
+                      color: iconColor,
+                      fontWeight:
+                          isSelected ? FontWeight.w600 : FontWeight.w500,
+                      letterSpacing: 0.2,
+                    ),
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    softWrap: false,
+                  ),
                 ),
-                textAlign: TextAlign.center,
               ),
             ],
           ),
