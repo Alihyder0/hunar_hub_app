@@ -9,8 +9,14 @@ class ProfileCompletionController extends GetxController
   late final Animation<double> iconFade;
   late final AnimationController contentController;
 
-  late final TextEditingController aboutController;
+  late final TextEditingController professionalTitleController;
+  late final TextEditingController summaryController;
+  late final TextEditingController skillInputController;
+  late final TextEditingController certificationInputController;
+
   final RxList<String> selectedSkills = <String>[].obs;
+  final RxList<String> customSkills = <String>[].obs;
+  final RxList<String> certifications = <String>[].obs;
 
   late final String email;
 
@@ -33,7 +39,10 @@ class ProfileCompletionController extends GetxController
         ? (Get.arguments as Map)['email'] as String
         : 'student@email.com';
 
-    aboutController = TextEditingController();
+    professionalTitleController = TextEditingController();
+    summaryController = TextEditingController();
+    skillInputController = TextEditingController();
+    certificationInputController = TextEditingController();
 
     iconController = AnimationController(
       vsync: this,
@@ -67,6 +76,9 @@ class ProfileCompletionController extends GetxController
   }
 
   void toggleSkill(String skill) {
+    if (!availableSkills.contains(skill) && !customSkills.contains(skill)) {
+      customSkills.add(skill);
+    }
     if (selectedSkills.contains(skill)) {
       selectedSkills.remove(skill);
     } else {
@@ -74,10 +86,42 @@ class ProfileCompletionController extends GetxController
     }
   }
 
+  void addSkillFromInput() {
+    final skill = skillInputController.text.trim();
+    if (skill.isEmpty) return;
+
+    skillInputController.clear();
+    if (!selectedSkills.contains(skill)) {
+      selectedSkills.add(skill);
+    }
+    if (!availableSkills.contains(skill) && !customSkills.contains(skill)) {
+      customSkills.add(skill);
+    }
+  }
+
+  void removeCustomSkill(String skill) {
+    customSkills.remove(skill);
+    selectedSkills.remove(skill);
+  }
+
+  void addCertification() {
+    final certification = certificationInputController.text.trim();
+    if (certification.isEmpty) return;
+
+    certificationInputController.clear();
+    if (!certifications.contains(certification)) {
+      certifications.add(certification);
+    }
+  }
+
+  void removeCertification(String certification) {
+    certifications.remove(certification);
+  }
+
   void completeProfile() {
     Get.snackbar(
       'Profile Completed',
-      'Your learning experience is now personalized!',
+      'Your trainer profile is now ready to be discovered!',
     );
   }
 
@@ -92,7 +136,10 @@ class ProfileCompletionController extends GetxController
   void onClose() {
     iconController.dispose();
     contentController.dispose();
-    aboutController.dispose();
+    professionalTitleController.dispose();
+    summaryController.dispose();
+    skillInputController.dispose();
+    certificationInputController.dispose();
     super.onClose();
   }
 }
