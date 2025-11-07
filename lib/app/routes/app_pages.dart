@@ -12,8 +12,10 @@ import '../modules/signup_role/signup_role_binding.dart';
 import '../modules/signup_role/signup_role_view.dart';
 import '../modules/student_signup/student_signup_binding.dart';
 import '../modules/student_signup/student_signup_view.dart';
-import '../modules/trainer_signup/trainer_signup_binding.dart';
-import '../modules/trainer_signup/trainer_signup_view.dart';
+import '../modules/student_verification/student_verification_binding.dart';
+import '../modules/student_verification/student_verification_view.dart';
+import '../modules/trainer_dashboard/trainer_dashboard_binding.dart';
+import '../modules/trainer_dashboard/trainer_dashboard_view.dart';
 import 'app_routes.dart';
 
 class AppPages {
@@ -52,6 +54,11 @@ class AppPages {
       name: AppRoutes.profileCompletion,
       page: () => const ProfileCompletionView(),
       binding: ProfileCompletionBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.trainerDashboard,
+      page: () => const TrainerDashboardView(),
+      binding: TrainerDashboardBinding(),
     ),
   ];
 }
