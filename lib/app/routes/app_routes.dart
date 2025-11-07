@@ -6,4 +6,5 @@ abstract class AppRoutes {
   static const trainerSignup = '/trainer-signup';
   static const emailVerification = '/email-verification';
   static const profileCompletion = '/profile-completion';
+  static const trainerDashboard = '/trainer-dashboard';
 }

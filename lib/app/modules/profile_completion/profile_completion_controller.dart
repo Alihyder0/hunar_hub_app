@@ -2,6 +2,8 @@ import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../routes/app_routes.dart';
+
 class ProfileCompletionController extends GetxController
     with GetTickerProviderStateMixin {
   late final AnimationController iconController;
@@ -119,17 +121,11 @@ class ProfileCompletionController extends GetxController
   }
 
   void completeProfile() {
-    Get.snackbar(
-      'Profile Completed',
-      'Your trainer profile is now ready to be discovered!',
-    );
+    Get.offAllNamed(AppRoutes.trainerDashboard);
   }
 
   void skipForNow() {
-    Get.snackbar(
-      'Skipped',
-      'You can complete your profile anytime from settings.',
-    );
+    Get.offAllNamed(AppRoutes.trainerDashboard);
   }
 
   @override
