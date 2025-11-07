@@ -7,10 +7,10 @@ import '../../theme/app_colors.dart';
 import '../../widgets/brand_tile.dart';
 import '../../widgets/signup_field.dart';
 import '../../widgets/staggered_fade_slide.dart';
-import 'student_signup_controller.dart';
+import 'trainer_signup_controller.dart';
 
-class StudentSignupView extends GetView<StudentSignupController> {
-  const StudentSignupView({super.key});
+class TrainerSignupView extends GetView<TrainerSignupController> {
+  const TrainerSignupView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,26 +21,26 @@ class StudentSignupView extends GetView<StudentSignupController> {
           Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [Color(0xFFF7F1E7), Color(0xFFF2E6D8)],
+                colors: [Color(0xFFF8EFE4), Color(0xFFF4E2CF)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
             ),
           ),
           Positioned(
-            top: -70,
+            top: -80,
             left: -50,
             child: _BlurredCircle(
-              diameter: 220,
+              diameter: 230,
               color: AppColors.accent.withOpacity(0.18),
             ),
           ),
           Positioned(
-            bottom: -80,
+            bottom: -85,
             right: -30,
             child: _BlurredCircle(
-              diameter: 260,
-              color: AppColors.accentDeep.withOpacity(0.15),
+              diameter: 270,
+              color: AppColors.accentDeep.withOpacity(0.16),
             ),
           ),
           SafeArea(
@@ -56,7 +56,7 @@ class StudentSignupView extends GetView<StudentSignupController> {
                     child: ConstrainedBox(
                       constraints: BoxConstraints(
                         minHeight: minHeight,
-                        maxWidth: 560,
+                        maxWidth: 580,
                       ),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
@@ -83,15 +83,15 @@ class StudentSignupView extends GetView<StudentSignupController> {
                               ),
                             ),
                           ),
-                          const SizedBox(height: 12),
+                          const SizedBox(height: 16),
                           ScaleTransition(
                             scale: controller.iconScale,
                             child: FadeTransition(
                               opacity: controller.iconFade,
                               child: const BrandTile(
-                                size: 90,
+                                size: 92,
                                 child: Icon(
-                                  Icons.auto_awesome_rounded,
+                                  Icons.workspace_premium_outlined,
                                   color: Colors.white,
                                   size: 40,
                                 ),
@@ -114,7 +114,7 @@ class StudentSignupView extends GetView<StudentSignupController> {
                                 ),
                                 const SizedBox(height: 8),
                                 Text(
-                                  'Sign up as Student to start learning',
+                                  'Sign up as Trainer to mentor passionate learners',
                                   style: textTheme.bodyMedium?.copyWith(
                                     color: AppColors.textSecondary,
                                   ),
@@ -132,7 +132,7 @@ class StudentSignupView extends GetView<StudentSignupController> {
                             child: Container(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 24,
-                                vertical: 28,
+                                vertical: 30,
                               ),
                               decoration: BoxDecoration(
                                 color: Colors.white,
@@ -227,8 +227,9 @@ class StudentSignupView extends GetView<StudentSignupController> {
                               child: FilledButton(
                                 onPressed: controller.continueToVerification,
                                 style: FilledButton.styleFrom(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 18),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 18,
+                                  ),
                                   backgroundColor: AppColors.accent,
                                   foregroundColor: Colors.white,
                                   shape: RoundedRectangleBorder(
@@ -244,13 +245,25 @@ class StudentSignupView extends GetView<StudentSignupController> {
                             controller: controller.contentController,
                             start: 0.65,
                             end: 1,
-                            child: Text(
-                              'By continuing, you agree to our Terms of Service and Privacy Policy.',
-                              style: textTheme.bodySmall?.copyWith(
-                                color: AppColors.muted,
-                                height: 1.4,
-                              ),
-                              textAlign: TextAlign.center,
+                            child: Column(
+                              children: [
+                                Text(
+                                  'By continuing, you agree to our Terms of Service and Privacy Policy.',
+                                  style: textTheme.bodySmall?.copyWith(
+                                    color: AppColors.muted,
+                                    height: 1.4,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                                const SizedBox(height: 12),
+                                Text(
+                                  'Need assistance with trainer onboarding? Reach out to our support team.',
+                                  style: textTheme.bodySmall?.copyWith(
+                                    color: AppColors.textSecondary.withOpacity(0.7),
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
                             ),
                           ),
                         ],

@@ -12,6 +12,8 @@ import '../modules/student_signup/student_signup_binding.dart';
 import '../modules/student_signup/student_signup_view.dart';
 import '../modules/student_verification/student_verification_binding.dart';
 import '../modules/student_verification/student_verification_view.dart';
+import '../modules/trainer_signup/trainer_signup_binding.dart';
+import '../modules/trainer_signup/trainer_signup_view.dart';
 import 'app_routes.dart';
 
 class AppPages {
@@ -35,6 +37,11 @@ class AppPages {
       name: AppRoutes.studentSignup,
       page: () => const StudentSignupView(),
       binding: StudentSignupBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.trainerSignup,
+      page: () => const TrainerSignupView(),
+      binding: TrainerSignupBinding(),
     ),
     GetPage(
       name: AppRoutes.studentVerification,
