@@ -53,7 +53,10 @@ class StudentSignupController extends GetxController
 
   void continueToVerification() {
     if (!isClosed) {
-      Get.toNamed(AppRoutes.studentVerification);
+      Get.toNamed(
+        AppRoutes.studentVerification,
+        arguments: const {'role': 'student'},
+      );
     }
   }
 }

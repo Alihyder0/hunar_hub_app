@@ -2,6 +2,8 @@ import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+enum ProfileCompletionRole { student, trainer }
+
 class ProfileCompletionController extends GetxController
     with GetTickerProviderStateMixin {
   late final AnimationController iconController;
@@ -9,8 +11,16 @@ class ProfileCompletionController extends GetxController
   late final Animation<double> iconFade;
   late final AnimationController contentController;
 
+  late final ProfileCompletionRole role;
+  late final TextEditingController professionalTitleController;
+  late final TextEditingController summaryController;
+  late final TextEditingController skillInputController;
+  late final TextEditingController certificationInputController;
   late final TextEditingController aboutController;
+
   final RxList<String> selectedSkills = <String>[].obs;
+  final RxList<String> customSkills = <String>[].obs;
+  final RxList<String> certifications = <String>[].obs;
 
   late final String email;
 
@@ -29,10 +39,35 @@ class ProfileCompletionController extends GetxController
   void onInit() {
     super.onInit();
 
-    email = (Get.arguments is Map && (Get.arguments as Map).containsKey('email'))
-        ? (Get.arguments as Map)['email'] as String
-        : 'student@email.com';
+    String? resolvedEmail;
+    ProfileCompletionRole resolvedRole = ProfileCompletionRole.student;
 
+    final args = Get.arguments;
+    if (args is Map) {
+      final rawEmail = args['email'];
+      if (rawEmail is String && rawEmail.isNotEmpty) {
+        resolvedEmail = rawEmail;
+      }
+      final rawRole = args['role'];
+      if (rawRole is String) {
+        if (rawRole.toLowerCase() == 'trainer') {
+          resolvedRole = ProfileCompletionRole.trainer;
+        } else if (rawRole.toLowerCase() == 'student') {
+          resolvedRole = ProfileCompletionRole.student;
+        }
+      }
+    }
+
+    email = resolvedEmail ??
+        (resolvedRole == ProfileCompletionRole.trainer
+            ? 'trainer@email.com'
+            : 'student@email.com');
+    role = resolvedRole;
+
+    professionalTitleController = TextEditingController();
+    summaryController = TextEditingController();
+    skillInputController = TextEditingController();
+    certificationInputController = TextEditingController();
     aboutController = TextEditingController();
 
     iconController = AnimationController(
@@ -56,6 +91,8 @@ class ProfileCompletionController extends GetxController
     );
   }
 
+  bool get isTrainer => role == ProfileCompletionRole.trainer;
+
   @override
   void onReady() {
     super.onReady();
@@ -67,6 +104,9 @@ class ProfileCompletionController extends GetxController
   }
 
   void toggleSkill(String skill) {
+    if (!availableSkills.contains(skill) && !customSkills.contains(skill)) {
+      customSkills.add(skill);
+    }
     if (selectedSkills.contains(skill)) {
       selectedSkills.remove(skill);
     } else {
@@ -74,10 +114,44 @@ class ProfileCompletionController extends GetxController
     }
   }
 
+  void addSkillFromInput() {
+    final skill = skillInputController.text.trim();
+    if (skill.isEmpty) return;
+
+    skillInputController.clear();
+    if (!availableSkills.contains(skill) && !customSkills.contains(skill)) {
+      customSkills.add(skill);
+    }
+    if (!selectedSkills.contains(skill)) {
+      selectedSkills.add(skill);
+    }
+  }
+
+  void removeCustomSkill(String skill) {
+    customSkills.remove(skill);
+    selectedSkills.remove(skill);
+  }
+
+  void addCertification() {
+    final certification = certificationInputController.text.trim();
+    if (certification.isEmpty) return;
+
+    certificationInputController.clear();
+    if (!certifications.contains(certification)) {
+      certifications.add(certification);
+    }
+  }
+
+  void removeCertification(String certification) {
+    certifications.remove(certification);
+  }
+
   void completeProfile() {
     Get.snackbar(
       'Profile Completed',
-      'Your learning experience is now personalized!',
+      isTrainer
+          ? 'Your trainer profile is now ready to be discovered!'
+          : 'Your learning experience is now personalized!',
     );
   }
 
@@ -92,6 +166,10 @@ class ProfileCompletionController extends GetxController
   void onClose() {
     iconController.dispose();
     contentController.dispose();
+    professionalTitleController.dispose();
+    summaryController.dispose();
+    skillInputController.dispose();
+    certificationInputController.dispose();
     aboutController.dispose();
     super.onClose();
   }

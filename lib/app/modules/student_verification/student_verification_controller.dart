@@ -14,14 +14,32 @@ class StudentVerificationController extends GetxController
   late final List<TextEditingController> otpControllers;
   late final List<FocusNode> otpFocusNodes;
   late final String email;
+  late final String role;
 
   @override
   void onInit() {
     super.onInit();
 
-    email = (Get.arguments is Map && (Get.arguments as Map).containsKey('email'))
-        ? (Get.arguments as Map)['email'] as String
-        : 'student@email.com';
+    String? resolvedEmail;
+    String resolvedRole = 'student';
+
+    final args = Get.arguments;
+    if (args is Map) {
+      final rawEmail = args['email'];
+      if (rawEmail is String && rawEmail.isNotEmpty) {
+        resolvedEmail = rawEmail;
+      }
+      final rawRole = args['role'];
+      if (rawRole is String && rawRole.isNotEmpty) {
+        resolvedRole = rawRole.toLowerCase();
+      }
+    }
+
+    role = resolvedRole;
+    email = resolvedEmail ??
+        (resolvedRole == 'trainer'
+            ? 'trainer@email.com'
+            : 'student@email.com');
 
     otpControllers =
         List<TextEditingController>.generate(6, (_) => TextEditingController());
@@ -86,7 +104,10 @@ class StudentVerificationController extends GetxController
 
     Get.offNamed(
       AppRoutes.profileCompletion,
-      arguments: {'email': email},
+      arguments: {
+        'email': email,
+        'role': role,
+      },
     );
   }
 
