@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class TrainerDashboardController extends GetxController {
+  final RxInt selectedNavIndex = 0.obs;
+
   final List<DashboardStatData> stats = const [
     DashboardStatData(
       title: 'Active Students',
@@ -110,6 +112,10 @@ class TrainerDashboardController extends GetxController {
   String get greeting => 'Good afternoon, Trainer!';
 
   String get subGreeting => 'Your students are eager to learn. Let’s get started.';
+
+  void onNavItemTap(int index) {
+    selectedNavIndex.value = index;
+  }
 }
 
 class DashboardStatData {
