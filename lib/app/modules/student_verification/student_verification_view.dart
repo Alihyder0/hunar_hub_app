@@ -298,7 +298,7 @@ class _OtpDigitField extends StatelessWidget {
         onChanged: onChanged,
         onSubmitted: (_) => onSubmitted(),
         textInputAction: isLast ? TextInputAction.done : TextInputAction.next,
-        inputFormatters: const [
+        inputFormatters:  [
           FilteringTextInputFormatter.digitsOnly,
           LengthLimitingTextInputFormatter(1),
         ],
