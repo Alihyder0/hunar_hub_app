@@ -13,8 +13,10 @@ class TrainerDashboardView extends GetView<TrainerDashboardController> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final isMobile = MediaQuery.of(context).size.width < 720;
 
     return Scaffold(
+      extendBody: isMobile,
       body: Stack(
         children: [
           Container(
@@ -49,68 +51,43 @@ class TrainerDashboardView extends GetView<TrainerDashboardController> {
 
                 return Center(
                   child: SingleChildScrollView(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 24,
-                      vertical: 24,
+                    padding: EdgeInsets.fromLTRB(
+                      isMobile ? 20 : 24,
+                      isMobile ? 20 : 24,
+                      isMobile ? 20 : 24,
+                      isMobile ? 160 : 32,
                     ),
                     child: ConstrainedBox(
                       constraints: BoxConstraints(maxWidth: maxWidth),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            children: [
-                              const BrandTile(
-                                size: 64,
-                                child: Icon(
-                                  Icons.auto_awesome_rounded,
-                                  color: Colors.white,
-                                  size: 32,
-                                ),
-                              ),
-                              const SizedBox(width: 18),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Trainer Dashboard',
-                                      style: textTheme.headlineSmall?.copyWith(
-                                        fontWeight: FontWeight.w600,
-                                        color: AppColors.textPrimary,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      'Monitor your courses, students, and earnings at a glance.',
-                                      style: textTheme.bodyMedium?.copyWith(
-                                        color: AppColors.textSecondary,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              IconButton(
-                                onPressed: () {},
-                                icon: const Icon(Icons.notifications_active_outlined),
-                                color: AppColors.textSecondary,
-                              ),
-                              const SizedBox(width: 4),
-                              IconButton(
-                                onPressed: () {},
-                                icon: const Icon(Icons.settings_outlined),
-                                color: AppColors.textSecondary,
-                              ),
-                            ],
+                          _DashboardHeader(
+                            textTheme: textTheme,
+                            isMobile: isMobile,
                           ),
-                          const SizedBox(height: 26),
-                          _HighlightCard(controller: controller, textTheme: textTheme),
-                          const SizedBox(height: 28),
-                          _DashboardStats(controller: controller, textTheme: textTheme),
-                          const SizedBox(height: 32),
-                          _MyCoursesSection(controller: controller, textTheme: textTheme),
-                          const SizedBox(height: 28),
-                          _RecentEnrollments(controller: controller, textTheme: textTheme),
+                          SizedBox(height: isMobile ? 20 : 26),
+                          _HighlightCard(
+                            controller: controller,
+                            textTheme: textTheme,
+                            isMobile: isMobile,
+                          ),
+                          SizedBox(height: isMobile ? 22 : 28),
+                          _DashboardStats(
+                            controller: controller,
+                            textTheme: textTheme,
+                          ),
+                          SizedBox(height: isMobile ? 26 : 32),
+                          _MyCoursesSection(
+                            controller: controller,
+                            textTheme: textTheme,
+                            isMobile: isMobile,
+                          ),
+                          SizedBox(height: isMobile ? 24 : 28),
+                          _RecentEnrollments(
+                            controller: controller,
+                            textTheme: textTheme,
+                          ),
                         ],
                       ),
                     ),
@@ -121,6 +98,144 @@ class TrainerDashboardView extends GetView<TrainerDashboardController> {
           ),
         ],
       ),
+      bottomNavigationBar: isMobile
+          ? _TrainerBottomNavBar(
+              controller: controller,
+              textTheme: textTheme,
+            )
+          : null,
+    );
+  }
+}
+
+class _DashboardHeader extends StatelessWidget {
+  const _DashboardHeader({
+    required this.textTheme,
+    required this.isMobile,
+  });
+
+  final TextTheme textTheme;
+  final bool isMobile;
+
+  @override
+  Widget build(BuildContext context) {
+    final titleStyle = (isMobile ? textTheme.titleLarge : textTheme.headlineSmall)?.copyWith(
+      fontWeight: FontWeight.w600,
+      color: AppColors.textPrimary,
+    );
+    final subtitleStyle = textTheme.bodyMedium?.copyWith(
+      color: AppColors.textSecondary,
+    );
+
+    if (isMobile) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const BrandTile(
+                size: 52,
+                child: Icon(
+                  Icons.auto_awesome_rounded,
+                  color: Colors.white,
+                  size: 28,
+                ),
+              ),
+              const Spacer(),
+              const _MobileHeaderActionButton(
+                icon: Icons.notifications_active_outlined,
+              ),
+              const SizedBox(width: 10),
+              const _MobileHeaderActionButton(
+                icon: Icons.settings_outlined,
+              ),
+            ],
+          ),
+          const SizedBox(height: 18),
+          Text(
+            'Trainer Dashboard',
+            style: titleStyle,
+          ),
+          const SizedBox(height: 6),
+          Text(
+            'Monitor your courses, students, and earnings at a glance.',
+            style: subtitleStyle,
+          ),
+        ],
+      );
+    }
+
+    return Row(
+      children: [
+        const BrandTile(
+          size: 64,
+          child: Icon(
+            Icons.auto_awesome_rounded,
+            color: Colors.white,
+            size: 32,
+          ),
+        ),
+        const SizedBox(width: 18),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Trainer Dashboard',
+                style: titleStyle,
+              ),
+              const SizedBox(height: 4),
+              Text(
+                'Monitor your courses, students, and earnings at a glance.',
+                style: subtitleStyle,
+              ),
+            ],
+          ),
+        ),
+        IconButton(
+          onPressed: () {},
+          icon: const Icon(Icons.notifications_active_outlined),
+          color: AppColors.textSecondary,
+        ),
+        const SizedBox(width: 4),
+        IconButton(
+          onPressed: () {},
+          icon: const Icon(Icons.settings_outlined),
+          color: AppColors.textSecondary,
+        ),
+      ],
+    );
+  }
+}
+
+class _MobileHeaderActionButton extends StatelessWidget {
+  const _MobileHeaderActionButton({
+    required this.icon,
+  });
+
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        shape: BoxShape.circle,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.08),
+            blurRadius: 12,
+            offset: const Offset(0, 6),
+          ),
+        ],
+      ),
+      child: IconButton(
+        onPressed: () {},
+        icon: Icon(icon, size: 22),
+        color: AppColors.textSecondary,
+        padding: const EdgeInsets.all(12),
+        splashRadius: 28,
+      ),
     );
   }
 }
@@ -129,15 +244,20 @@ class _HighlightCard extends StatelessWidget {
   const _HighlightCard({
     required this.controller,
     required this.textTheme,
+    required this.isMobile,
   });
 
   final TrainerDashboardController controller;
   final TextTheme textTheme;
+  final bool isMobile;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 26),
+      padding: EdgeInsets.symmetric(
+        horizontal: isMobile ? 20 : 28,
+        vertical: isMobile ? 22 : 26,
+      ),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
           colors: [Color(0xFF4FC08D), Color(0xFF0083B0)],
@@ -153,42 +273,83 @@ class _HighlightCard extends StatelessWidget {
           ),
         ],
       ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
+      child: isMobile
+          ? Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  controller.greeting,
-                  style: textTheme.titleLarge?.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                  ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      controller.greeting,
+                      style: textTheme.titleLarge?.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      controller.subGreeting,
+                      style: textTheme.bodyMedium?.copyWith(
+                        color: Colors.white.withOpacity(0.9),
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 6),
-                Text(
-                  controller.subGreeting,
-                  style: textTheme.bodyMedium?.copyWith(
-                    color: Colors.white.withOpacity(0.9),
+                const SizedBox(height: 20),
+                SizedBox(
+                  width: double.infinity,
+                  child: FilledButton(
+                    onPressed: () {},
+                    style: FilledButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: AppColors.accentDeep,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      textStyle:
+                          textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
+                    ),
+                    child: const Text('Create New Course'),
                   ),
                 ),
               ],
+            )
+          : Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        controller.greeting,
+                        style: textTheme.titleLarge?.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        controller.subGreeting,
+                        style: textTheme.bodyMedium?.copyWith(
+                          color: Colors.white.withOpacity(0.9),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 18),
+                FilledButton(
+                  onPressed: () {},
+                  style: FilledButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    foregroundColor: AppColors.accentDeep,
+                    padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 16),
+                    textStyle:
+                        textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
+                  ),
+                  child: const Text('Create New Course'),
+                ),
+              ],
             ),
-          ),
-          const SizedBox(width: 18),
-          FilledButton(
-            onPressed: () {},
-            style: FilledButton.styleFrom(
-              backgroundColor: Colors.white,
-              foregroundColor: AppColors.accentDeep,
-              padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 16),
-              textStyle: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
-            ),
-            child: const Text('Create New Course'),
-          ),
-        ],
-      ),
     );
   }
 }
@@ -312,53 +473,63 @@ class _MyCoursesSection extends StatelessWidget {
   const _MyCoursesSection({
     required this.controller,
     required this.textTheme,
+    required this.isMobile,
   });
 
   final TrainerDashboardController controller;
   final TextTheme textTheme;
+  final bool isMobile;
 
   @override
   Widget build(BuildContext context) {
+    final headerContent = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'My Courses',
+          style: textTheme.titleLarge?.copyWith(
+            color: AppColors.textPrimary,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        const SizedBox(height: 6),
+        Text(
+          'Manage content, track progress and keep your learners engaged.',
+          style: textTheme.bodyMedium?.copyWith(
+            color: AppColors.textSecondary,
+          ),
+        ),
+      ],
+    );
+
+    final filterButton = TextButton.icon(
+      onPressed: () {},
+      icon: const Icon(Icons.filter_list_rounded),
+      label: const Text('Filters'),
+      style: TextButton.styleFrom(
+        foregroundColor: AppColors.accentDeep,
+        textStyle: textTheme.bodyMedium?.copyWith(
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'My Courses',
-                    style: textTheme.titleLarge?.copyWith(
-                      color: AppColors.textPrimary,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    'Manage content, track progress and keep your learners engaged.',
-                    style: textTheme.bodyMedium?.copyWith(
-                      color: AppColors.textSecondary,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            TextButton.icon(
-              onPressed: () {},
-              icon: const Icon(Icons.filter_list_rounded),
-              label: const Text('Filters'),
-              style: TextButton.styleFrom(
-                foregroundColor: AppColors.accentDeep,
-                textStyle: textTheme.bodyMedium?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 20),
+        if (isMobile) ...[
+          headerContent,
+          const SizedBox(height: 12),
+          filterButton,
+        ] else ...[
+          Row(
+            children: [
+              Expanded(child: headerContent),
+              filterButton,
+            ],
+          ),
+        ],
+        SizedBox(height: isMobile ? 16 : 20),
         LayoutBuilder(
           builder: (context, constraints) {
             int columns = 1;
@@ -367,7 +538,7 @@ class _MyCoursesSection extends StatelessWidget {
             } else if (constraints.maxWidth >= 720) {
               columns = 2;
             }
-            const spacing = 20.0;
+            final spacing = isMobile ? 16.0 : 20.0;
             final width =
                 (constraints.maxWidth - (columns - 1) * spacing) / columns;
 
@@ -721,6 +892,136 @@ class _EnrollmentTile extends StatelessWidget {
       ),
     );
   }
+}
+
+class _TrainerBottomNavBar extends StatelessWidget {
+  const _TrainerBottomNavBar({
+    required this.controller,
+    required this.textTheme,
+  });
+
+  final TrainerDashboardController controller;
+  final TextTheme textTheme;
+
+  static const List<_NavItemData> _items = [
+    _NavItemData(icon: Icons.dashboard_rounded, label: 'Dashboard'),
+    _NavItemData(icon: Icons.menu_book_outlined, label: 'Courses'),
+    _NavItemData(icon: Icons.groups_rounded, label: 'Students'),
+    _NavItemData(icon: Icons.chat_bubble_outline_rounded, label: 'Messages'),
+    _NavItemData(icon: Icons.person_outline_rounded, label: 'Profile'),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+      child: Obx(() {
+        final navChildren = <Widget>[];
+        for (int i = 0; i < _items.length; i++) {
+          navChildren.add(
+            Expanded(
+              child: _NavBarItem(
+                data: _items[i],
+                isSelected: controller.selectedNavIndex.value == i,
+                onTap: () => controller.onNavItemTap(i),
+                textTheme: textTheme,
+              ),
+            ),
+          );
+          if (i != _items.length - 1) {
+            navChildren.add(const SizedBox(width: 6));
+          }
+        }
+
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(28),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.08),
+                blurRadius: 22,
+                offset: const Offset(0, 16),
+              ),
+            ],
+          ),
+          child: Row(children: navChildren),
+        );
+      }),
+    );
+  }
+}
+
+class _NavBarItem extends StatelessWidget {
+  const _NavBarItem({
+    required this.data,
+    required this.isSelected,
+    required this.onTap,
+    required this.textTheme,
+  });
+
+  final _NavItemData data;
+  final bool isSelected;
+  final VoidCallback onTap;
+  final TextTheme textTheme;
+
+  @override
+  Widget build(BuildContext context) {
+    final Color iconColor =
+        isSelected ? AppColors.accentDeep : AppColors.textSecondary;
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(22),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 220),
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          decoration: BoxDecoration(
+            color: isSelected ? AppColors.accent.withOpacity(0.16) : Colors.transparent,
+            borderRadius: BorderRadius.circular(22),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(data.icon, color: iconColor, size: 24),
+              const SizedBox(height: 6),
+              SizedBox(
+                height: 16,
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    data.label,
+                    style: textTheme.labelSmall?.copyWith(
+                      color: iconColor,
+                      fontWeight:
+                          isSelected ? FontWeight.w600 : FontWeight.w500,
+                      letterSpacing: 0.2,
+                    ),
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    softWrap: false,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _NavItemData {
+  const _NavItemData({
+    required this.icon,
+    required this.label,
+  });
+
+  final IconData icon;
+  final String label;
 }
 
 class _BlurredCircle extends StatelessWidget {
