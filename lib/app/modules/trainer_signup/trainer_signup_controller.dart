@@ -1,6 +1,8 @@
 import 'package:flutter/animation.dart';
 import 'package:get/get.dart';
 
+import '../../routes/app_routes.dart';
+
 class TrainerSignupController extends GetxController
     with GetTickerProviderStateMixin {
   late final AnimationController iconController;
@@ -51,9 +53,9 @@ class TrainerSignupController extends GetxController
 
   void continueToVerification() {
     if (!isClosed) {
-      Get.snackbar(
-        'Trainer Application',
-        'We\'ll review your details and reach out for verification shortly.',
+      Get.toNamed(
+        AppRoutes.emailVerification,
+        arguments: {'email': 'trainer@email.com'},
       );
     }
   }

@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 
 import '../../theme/app_colors.dart';
 import '../../widgets/brand_tile.dart';
-import '../../widgets/signup_field.dart';
 import '../../widgets/staggered_fade_slide.dart';
 import 'trainer_signup_controller.dart';
 
@@ -21,26 +20,26 @@ class TrainerSignupView extends GetView<TrainerSignupController> {
           Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [Color(0xFFF8EFE4), Color(0xFFF4E2CF)],
+                colors: [Color(0xFFF7F1E7), Color(0xFFF2E6D8)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
             ),
           ),
           Positioned(
-            top: -80,
+            top: -70,
             left: -50,
             child: _BlurredCircle(
-              diameter: 230,
+              diameter: 220,
               color: AppColors.accent.withOpacity(0.18),
             ),
           ),
           Positioned(
-            bottom: -85,
+            bottom: -80,
             right: -30,
             child: _BlurredCircle(
-              diameter: 270,
-              color: AppColors.accentDeep.withOpacity(0.16),
+              diameter: 260,
+              color: AppColors.accentDeep.withOpacity(0.15),
             ),
           ),
           SafeArea(
@@ -56,7 +55,7 @@ class TrainerSignupView extends GetView<TrainerSignupController> {
                     child: ConstrainedBox(
                       constraints: BoxConstraints(
                         minHeight: minHeight,
-                        maxWidth: 580,
+                        maxWidth: 600,
                       ),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
@@ -83,7 +82,7 @@ class TrainerSignupView extends GetView<TrainerSignupController> {
                               ),
                             ),
                           ),
-                          const SizedBox(height: 16),
+                          const SizedBox(height: 12),
                           ScaleTransition(
                             scale: controller.iconScale,
                             child: FadeTransition(
@@ -91,14 +90,14 @@ class TrainerSignupView extends GetView<TrainerSignupController> {
                               child: const BrandTile(
                                 size: 92,
                                 child: Icon(
-                                  Icons.workspace_premium_outlined,
+                                  Icons.workspace_premium_rounded,
                                   color: Colors.white,
                                   size: 40,
                                 ),
                               ),
                             ),
                           ),
-                          const SizedBox(height: 20),
+                          const SizedBox(height: 22),
                           StaggeredFadeSlide(
                             controller: controller.contentController,
                             start: 0.08,
@@ -106,7 +105,7 @@ class TrainerSignupView extends GetView<TrainerSignupController> {
                             child: Column(
                               children: [
                                 Text(
-                                  'Create Account',
+                                  'Join as Trainer',
                                   style: textTheme.headlineSmall?.copyWith(
                                     color: AppColors.textPrimary,
                                     fontWeight: FontWeight.w600,
@@ -114,7 +113,7 @@ class TrainerSignupView extends GetView<TrainerSignupController> {
                                 ),
                                 const SizedBox(height: 8),
                                 Text(
-                                  'Sign up as Trainer to mentor passionate learners',
+                                  'Share your expertise and mentor passionate learners.',
                                   style: textTheme.bodyMedium?.copyWith(
                                     color: AppColors.textSecondary,
                                   ),
@@ -123,20 +122,20 @@ class TrainerSignupView extends GetView<TrainerSignupController> {
                               ],
                             ),
                           ),
-                          const SizedBox(height: 28),
+                          const SizedBox(height: 30),
                           StaggeredFadeSlide(
                             controller: controller.contentController,
                             start: 0.15,
-                            end: 0.6,
+                            end: 0.68,
                             offset: const Offset(0, 0.04),
                             child: Container(
                               padding: const EdgeInsets.symmetric(
-                                horizontal: 24,
+                                horizontal: 26,
                                 vertical: 30,
                               ),
                               decoration: BoxDecoration(
                                 color: Colors.white,
-                                borderRadius: BorderRadius.circular(30),
+                                borderRadius: BorderRadius.circular(32),
                                 boxShadow: [
                                   BoxShadow(
                                     color: Colors.black.withOpacity(0.05),
@@ -151,14 +150,14 @@ class TrainerSignupView extends GetView<TrainerSignupController> {
                                   Row(
                                     children: [
                                       Expanded(
-                                        child: SignupField(
+                                        child: _SignupField(
                                           label: 'First Name',
                                           hint: 'Enter your first name',
                                         ),
                                       ),
                                       SizedBox(width: 18),
                                       Expanded(
-                                        child: SignupField(
+                                        child: _SignupField(
                                           label: 'Last Name',
                                           hint: 'Enter your last name',
                                         ),
@@ -166,52 +165,92 @@ class TrainerSignupView extends GetView<TrainerSignupController> {
                                     ],
                                   ),
                                   SizedBox(height: 18),
-                                  SignupField(
+                                  _SignupField(
                                     label: 'Email Address',
                                     hint: 'you@example.com',
                                     keyboardType: TextInputType.emailAddress,
                                   ),
                                   SizedBox(height: 18),
-                                  SignupField(
-                                    label: 'Phone Number',
-                                    hint: '+92 300 1234567',
-                                    keyboardType: TextInputType.phone,
-                                  ),
-                                  SizedBox(height: 18),
-                                  SignupField(
-                                    label: 'Password',
-                                    hint: 'Create a strong password',
-                                    obscureText: true,
-                                  ),
-                                  SizedBox(height: 18),
-                                  SignupField(
-                                    label: 'Confirm Password',
-                                    hint: 'Re-enter your password',
-                                    obscureText: true,
-                                  ),
-                                  SizedBox(height: 18),
-                                  SignupField(
-                                    label: 'CNIC',
-                                    hint: '12345-1234567-1',
-                                    keyboardType: TextInputType.number,
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: _SignupField(
+                                          label: 'Phone Number',
+                                          hint: '+92 300 1234567',
+                                          keyboardType: TextInputType.phone,
+                                        ),
+                                      ),
+                                      SizedBox(width: 18),
+                                      Expanded(
+                                        child: _SignupField(
+                                          label: 'WhatsApp Number',
+                                          hint: '+92 300 7654321',
+                                          keyboardType: TextInputType.phone,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                   SizedBox(height: 18),
                                   Row(
                                     children: [
                                       Expanded(
-                                        child: SignupField(
-                                          label: 'Date of Birth',
-                                          hint: 'DD / MM / YYYY',
+                                        child: _SignupField(
+                                          label: 'Password',
+                                          hint: 'Create a strong password',
+                                          obscureText: true,
                                         ),
                                       ),
                                       SizedBox(width: 18),
                                       Expanded(
-                                        child: SignupField(
+                                        child: _SignupField(
+                                          label: 'Confirm Password',
+                                          hint: 'Re-enter your password',
+                                          obscureText: true,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 18),
+                                  _SignupField(
+                                    label: 'CNIC',
+                                    hint: '12345-1234567-1',
+                                    keyboardType: TextInputType.number,
+                                  ),
+                                  SizedBox(height: 18),
+                                  _SignupField(
+                                    label: 'Primary Expertise',
+                                    hint: 'e.g. Pottery, Hand Embroidery',
+                                  ),
+                                  SizedBox(height: 18),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: _SignupField(
+                                          label: 'Years of Experience',
+                                          hint: 'e.g. 5',
+                                          keyboardType: TextInputType.number,
+                                        ),
+                                      ),
+                                      SizedBox(width: 18),
+                                      Expanded(
+                                        child: _SignupField(
                                           label: 'City',
                                           hint: 'Enter your city',
                                         ),
                                       ),
                                     ],
+                                  ),
+                                  SizedBox(height: 18),
+                                  _SignupField(
+                                    label: 'Portfolio or Social Link',
+                                    hint: 'https://instagram.com/yourprofile',
+                                    keyboardType: TextInputType.url,
+                                  ),
+                                  SizedBox(height: 18),
+                                  _SignupField(
+                                    label: 'Short Bio',
+                                    hint: 'Tell learners about yourself and your teaching style',
+                                    maxLines: 3,
                                   ),
                                 ],
                               ),
@@ -220,16 +259,15 @@ class TrainerSignupView extends GetView<TrainerSignupController> {
                           const SizedBox(height: 28),
                           StaggeredFadeSlide(
                             controller: controller.contentController,
-                            start: 0.55,
-                            end: 0.85,
+                            start: 0.62,
+                            end: 0.9,
                             child: SizedBox(
                               width: double.infinity,
                               child: FilledButton(
                                 onPressed: controller.continueToVerification,
                                 style: FilledButton.styleFrom(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 18,
-                                  ),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 18),
                                   backgroundColor: AppColors.accent,
                                   foregroundColor: Colors.white,
                                   shape: RoundedRectangleBorder(
@@ -243,27 +281,15 @@ class TrainerSignupView extends GetView<TrainerSignupController> {
                           const SizedBox(height: 16),
                           StaggeredFadeSlide(
                             controller: controller.contentController,
-                            start: 0.65,
+                            start: 0.75,
                             end: 1,
-                            child: Column(
-                              children: [
-                                Text(
-                                  'By continuing, you agree to our Terms of Service and Privacy Policy.',
-                                  style: textTheme.bodySmall?.copyWith(
-                                    color: AppColors.muted,
-                                    height: 1.4,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                                const SizedBox(height: 12),
-                                Text(
-                                  'Need assistance with trainer onboarding? Reach out to our support team.',
-                                  style: textTheme.bodySmall?.copyWith(
-                                    color: AppColors.textSecondary.withOpacity(0.7),
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
+                            child: Text(
+                              'By continuing, you agree to share accurate professional details for verification.',
+                              style: textTheme.bodySmall?.copyWith(
+                                color: AppColors.muted,
+                                height: 1.4,
+                              ),
+                              textAlign: TextAlign.center,
                             ),
                           ),
                         ],
@@ -276,6 +302,74 @@ class TrainerSignupView extends GetView<TrainerSignupController> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _SignupField extends StatelessWidget {
+  const _SignupField({
+    required this.label,
+    required this.hint,
+    this.obscureText = false,
+    this.keyboardType,
+    this.maxLines = 1,
+  });
+
+  final String label;
+  final String hint;
+  final bool obscureText;
+  final TextInputType? keyboardType;
+  final int maxLines;
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: textTheme.labelLarge?.copyWith(
+            color: AppColors.textPrimary,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        const SizedBox(height: 8),
+        TextField(
+          obscureText: obscureText,
+          keyboardType: keyboardType,
+          maxLines: maxLines,
+          minLines: maxLines,
+          decoration: InputDecoration(
+            hintText: hint,
+            filled: true,
+            fillColor: const Color(0xFFF9F6F1),
+            contentPadding: EdgeInsets.symmetric(
+              horizontal: 18,
+              vertical: maxLines > 1 ? 18 : 16,
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(22),
+              borderSide: BorderSide(
+                color: AppColors.muted.withOpacity(0.35),
+              ),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(22),
+              borderSide: BorderSide(
+                color: AppColors.muted.withOpacity(0.3),
+              ),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(22),
+              borderSide: const BorderSide(
+                color: AppColors.accent,
+                width: 1.4,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
