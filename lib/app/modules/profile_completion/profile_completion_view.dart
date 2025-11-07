@@ -107,7 +107,7 @@ class ProfileCompletionView extends GetView<ProfileCompletionController> {
                                 ),
                                 const SizedBox(height: 10),
                                 Text(
-                                  "Let's personalize your learning experience.",
+                                  'Showcase your expertise and credentials.',
                                   style: textTheme.bodyMedium?.copyWith(
                                     color: AppColors.textSecondary,
                                   ),
@@ -190,7 +190,7 @@ class ProfileCompletionView extends GetView<ProfileCompletionController> {
                                   ),
                                   const SizedBox(height: 32),
                                   Text(
-                                    'About You',
+                                    'Professional Title',
                                     style: textTheme.titleMedium?.copyWith(
                                       color: AppColors.textPrimary,
                                       fontWeight: FontWeight.w600,
@@ -198,11 +198,51 @@ class ProfileCompletionView extends GetView<ProfileCompletionController> {
                                   ),
                                   const SizedBox(height: 12),
                                   TextField(
-                                    controller: controller.aboutController,
+                                    controller: controller.professionalTitleController,
+                                    decoration: InputDecoration(
+                                      hintText: 'e.g. Certified Graphic Design Trainer',
+                                      filled: true,
+                                      fillColor: const Color(0xFFF9F6F1),
+                                      contentPadding: const EdgeInsets.symmetric(
+                                        horizontal: 20,
+                                        vertical: 18,
+                                      ),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(24),
+                                        borderSide: BorderSide(
+                                          color: AppColors.muted.withOpacity(0.35),
+                                        ),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(24),
+                                        borderSide: BorderSide(
+                                          color: AppColors.muted.withOpacity(0.3),
+                                        ),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(24),
+                                        borderSide: const BorderSide(
+                                          color: AppColors.accent,
+                                          width: 1.4,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 24),
+                                  Text(
+                                    'Professional Summary',
+                                    style: textTheme.titleMedium?.copyWith(
+                                      color: AppColors.textPrimary,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 12),
+                                  TextField(
+                                    controller: controller.summaryController,
                                     maxLines: 4,
                                     decoration: InputDecoration(
                                       hintText:
-                                          'Tell us about your interests and learning goals...',
+                                          'Share your experience, areas of expertise, and coaching style...',
                                       filled: true,
                                       fillColor: const Color(0xFFF9F6F1),
                                       contentPadding: const EdgeInsets.symmetric(
@@ -232,7 +272,7 @@ class ProfileCompletionView extends GetView<ProfileCompletionController> {
                                   ),
                                   const SizedBox(height: 28),
                                   Text(
-                                    'Skills to Learn',
+                                    'Your Skills',
                                     style: textTheme.titleMedium?.copyWith(
                                       color: AppColors.textPrimary,
                                       fontWeight: FontWeight.w600,
@@ -240,36 +280,191 @@ class ProfileCompletionView extends GetView<ProfileCompletionController> {
                                   ),
                                   const SizedBox(height: 14),
                                   Obx(
-                                    () => Wrap(
-                                      spacing: 12,
-                                      runSpacing: 12,
-                                      children: controller.availableSkills.map((skill) {
-                                        final isSelected =
-                                            controller.selectedSkills.contains(skill);
-                                        return ChoiceChip(
-                                          label: Text(skill),
-                                          selected: isSelected,
-                                          onSelected: (_) => controller.toggleSkill(skill),
-                                          labelStyle: textTheme.bodyMedium?.copyWith(
-                                            color: isSelected
-                                                ? Colors.white
-                                                : AppColors.textSecondary,
-                                            fontWeight:
-                                                isSelected ? FontWeight.w600 : FontWeight.w500,
-                                          ),
-                                          side: BorderSide(
-                                            color: isSelected
-                                                ? AppColors.accent
-                                                : AppColors.muted.withOpacity(0.3),
-                                          ),
-                                          selectedColor: AppColors.accent,
-                                          backgroundColor: const Color(0xFFF9F6F1),
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 14,
-                                            vertical: 10,
+                                    () {
+                                      final recommended = controller.availableSkills
+                                          .map((skill) => _SkillChip(
+                                                label: skill,
+                                                selected: controller.selectedSkills.contains(skill),
+                                                onSelected: () =>
+                                                    controller.toggleSkill(skill),
+                                                textTheme: textTheme,
+                                              ))
+                                          .toList();
+                                      final custom = controller.customSkills
+                                          .map((skill) => _SkillChip(
+                                                label: skill,
+                                                selected: controller.selectedSkills.contains(skill),
+                                                onSelected: () =>
+                                                    controller.toggleSkill(skill),
+                                                onDeleted: () =>
+                                                    controller.removeCustomSkill(skill),
+                                                textTheme: textTheme,
+                                              ))
+                                          .toList();
+                                      final chips = [...recommended, ...custom];
+                                      if (chips.isEmpty) {
+                                        return Text(
+                                          'Add the skills you teach to help learners find you.',
+                                          style: textTheme.bodyMedium?.copyWith(
+                                            color: AppColors.textSecondary,
                                           ),
                                         );
-                                      }).toList(),
+                                      }
+                                      return Wrap(
+                                        spacing: 12,
+                                        runSpacing: 12,
+                                        children: chips,
+                                      );
+                                    },
+                                  ),
+                                  const SizedBox(height: 16),
+                                  TextField(
+                                    controller: controller.skillInputController,
+                                    onSubmitted: (_) => controller.addSkillFromInput(),
+                                    decoration: InputDecoration(
+                                      hintText: 'Add a new skill',
+                                      filled: true,
+                                      fillColor: const Color(0xFFF9F6F1),
+                                      contentPadding: const EdgeInsets.symmetric(
+                                        horizontal: 20,
+                                        vertical: 16,
+                                      ),
+                                      suffixIcon: IconButton(
+                                        onPressed: controller.addSkillFromInput,
+                                        icon: const Icon(Icons.add_circle_outline),
+                                        color: AppColors.accentDeep,
+                                      ),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(24),
+                                        borderSide: BorderSide(
+                                          color: AppColors.muted.withOpacity(0.35),
+                                        ),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(24),
+                                        borderSide: BorderSide(
+                                          color: AppColors.muted.withOpacity(0.3),
+                                        ),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(24),
+                                        borderSide: const BorderSide(
+                                          color: AppColors.accent,
+                                          width: 1.4,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 28),
+                                  Text(
+                                    'Certifications',
+                                    style: textTheme.titleMedium?.copyWith(
+                                      color: AppColors.textPrimary,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 12),
+                                  Text(
+                                    'Upload certifications or list credentials that back your expertise.',
+                                    style: textTheme.bodyMedium?.copyWith(
+                                      color: AppColors.textSecondary,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 14),
+                                  Obx(
+                                    () {
+                                      if (controller.certifications.isEmpty) {
+                                        return Text(
+                                          'No certifications added yet.',
+                                          style: textTheme.bodyMedium?.copyWith(
+                                            color: AppColors.muted,
+                                          ),
+                                        );
+                                      }
+                                      return Column(
+                                        children: controller.certifications
+                                            .map(
+                                              (certification) => Container(
+                                                margin: const EdgeInsets.only(bottom: 12),
+                                                padding: const EdgeInsets.symmetric(
+                                                  horizontal: 18,
+                                                  vertical: 14,
+                                                ),
+                                                decoration: BoxDecoration(
+                                                  color: const Color(0xFFF9F6F1),
+                                                  borderRadius: BorderRadius.circular(20),
+                                                  border: Border.all(
+                                                    color:
+                                                        AppColors.muted.withOpacity(0.3),
+                                                  ),
+                                                ),
+                                                child: Row(
+                                                  children: [
+                                                    const Icon(
+                                                      Icons.verified_outlined,
+                                                      color: Colors.green,
+                                                    ),
+                                                    const SizedBox(width: 14),
+                                                    Expanded(
+                                                      child: Text(
+                                                        certification,
+                                                        style:
+                                                            textTheme.bodyMedium?.copyWith(
+                                                          color: AppColors.textPrimary,
+                                                          fontWeight: FontWeight.w500,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    IconButton(
+                                                      onPressed: () => controller
+                                                          .removeCertification(certification),
+                                                      icon: const Icon(Icons.close_rounded),
+                                                      color: AppColors.muted,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            )
+                                            .toList(),
+                                      );
+                                    },
+                                  ),
+                                  const SizedBox(height: 12),
+                                  TextField(
+                                    controller: controller.certificationInputController,
+                                    onSubmitted: (_) => controller.addCertification(),
+                                    decoration: InputDecoration(
+                                      hintText: 'Add certification or credential',
+                                      filled: true,
+                                      fillColor: const Color(0xFFF9F6F1),
+                                      contentPadding: const EdgeInsets.symmetric(
+                                        horizontal: 20,
+                                        vertical: 16,
+                                      ),
+                                      suffixIcon: IconButton(
+                                        onPressed: controller.addCertification,
+                                        icon: const Icon(Icons.upload_file_outlined),
+                                        color: AppColors.accentDeep,
+                                      ),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(24),
+                                        borderSide: BorderSide(
+                                          color: AppColors.muted.withOpacity(0.35),
+                                        ),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(24),
+                                        borderSide: BorderSide(
+                                          color: AppColors.muted.withOpacity(0.3),
+                                        ),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(24),
+                                        borderSide: const BorderSide(
+                                          color: AppColors.accent,
+                                          width: 1.4,
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -331,6 +526,54 @@ class _BlurredCircle extends StatelessWidget {
         shape: BoxShape.circle,
         color: color,
       ),
+    );
+  }
+}
+
+class _SkillChip extends StatelessWidget {
+  const _SkillChip({
+    required this.label,
+    required this.selected,
+    required this.onSelected,
+    required this.textTheme,
+    this.onDeleted,
+  });
+
+  final String label;
+  final bool selected;
+  final VoidCallback onSelected;
+  final VoidCallback? onDeleted;
+  final TextTheme textTheme;
+
+  @override
+  Widget build(BuildContext context) {
+    return InputChip(
+      label: Text(label),
+      selected: selected,
+      onPressed: onSelected,
+      onDeleted: onDeleted,
+      deleteIcon: onDeleted != null
+          ? const Icon(
+              Icons.close_rounded,
+              size: 18,
+            )
+          : null,
+      deleteIconColor: Colors.white,
+      labelStyle: textTheme.bodyMedium?.copyWith(
+        color: selected ? Colors.white : AppColors.textSecondary,
+        fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
+      ),
+      side: BorderSide(
+        color:
+            selected ? AppColors.accent : AppColors.muted.withOpacity(0.3),
+      ),
+      selectedColor: AppColors.accent,
+      backgroundColor: const Color(0xFFF9F6F1),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 14,
+        vertical: 10,
+      ),
+      showCheckmark: false,
     );
   }
 }

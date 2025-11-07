@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 
+import '../modules/email_verification/email_verification_binding.dart';
+import '../modules/email_verification/email_verification_view.dart';
 import '../modules/login/login_binding.dart';
 import '../modules/login/login_view.dart';
 import '../modules/onboarding/onboarding_binding.dart';
@@ -39,9 +41,14 @@ class AppPages {
       binding: StudentSignupBinding(),
     ),
     GetPage(
-      name: AppRoutes.studentVerification,
-      page: () => const StudentVerificationView(),
-      binding: StudentVerificationBinding(),
+      name: AppRoutes.trainerSignup,
+      page: () => const TrainerSignupView(),
+      binding: TrainerSignupBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.emailVerification,
+      page: () => const EmailVerificationView(),
+      binding: EmailVerificationBinding(),
     ),
     GetPage(
       name: AppRoutes.profileCompletion,

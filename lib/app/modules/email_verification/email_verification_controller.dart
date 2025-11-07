@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 
 import '../../routes/app_routes.dart';
 
-class StudentVerificationController extends GetxController
+class EmailVerificationController extends GetxController
     with GetTickerProviderStateMixin {
   late final AnimationController iconController;
   late final Animation<double> iconScale;
@@ -21,7 +21,7 @@ class StudentVerificationController extends GetxController
 
     email = (Get.arguments is Map && (Get.arguments as Map).containsKey('email'))
         ? (Get.arguments as Map)['email'] as String
-        : 'student@email.com';
+        : 'user@email.com';
 
     otpControllers =
         List<TextEditingController>.generate(6, (_) => TextEditingController());
