@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 
+import '../modules/email_verification/email_verification_binding.dart';
+import '../modules/email_verification/email_verification_view.dart';
 import '../modules/login/login_binding.dart';
 import '../modules/login/login_view.dart';
 import '../modules/onboarding/onboarding_binding.dart';
@@ -10,8 +12,8 @@ import '../modules/signup_role/signup_role_binding.dart';
 import '../modules/signup_role/signup_role_view.dart';
 import '../modules/student_signup/student_signup_binding.dart';
 import '../modules/student_signup/student_signup_view.dart';
-import '../modules/student_verification/student_verification_binding.dart';
-import '../modules/student_verification/student_verification_view.dart';
+import '../modules/trainer_signup/trainer_signup_binding.dart';
+import '../modules/trainer_signup/trainer_signup_view.dart';
 import 'app_routes.dart';
 
 class AppPages {
@@ -37,9 +39,14 @@ class AppPages {
       binding: StudentSignupBinding(),
     ),
     GetPage(
-      name: AppRoutes.studentVerification,
-      page: () => const StudentVerificationView(),
-      binding: StudentVerificationBinding(),
+      name: AppRoutes.trainerSignup,
+      page: () => const TrainerSignupView(),
+      binding: TrainerSignupBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.emailVerification,
+      page: () => const EmailVerificationView(),
+      binding: EmailVerificationBinding(),
     ),
     GetPage(
       name: AppRoutes.profileCompletion,

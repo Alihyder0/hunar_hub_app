@@ -3,13 +3,12 @@ import 'package:get/get.dart';
 
 import '../../routes/app_routes.dart';
 
-class SignupRoleController extends GetxController with GetTickerProviderStateMixin {
+class TrainerSignupController extends GetxController
+    with GetTickerProviderStateMixin {
   late final AnimationController iconController;
   late final Animation<double> iconScale;
   late final Animation<double> iconFade;
   late final AnimationController contentController;
-
-  final RxInt selectedRole = (-1).obs;
 
   @override
   void onInit() {
@@ -18,10 +17,12 @@ class SignupRoleController extends GetxController with GetTickerProviderStateMix
       vsync: this,
       duration: const Duration(milliseconds: 650),
     )..forward();
+
     iconScale = CurvedAnimation(
       parent: iconController,
       curve: Curves.easeOutBack,
     );
+
     iconFade = CurvedAnimation(
       parent: iconController,
       curve: Curves.easeOut,
@@ -29,7 +30,7 @@ class SignupRoleController extends GetxController with GetTickerProviderStateMix
 
     contentController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1500),
+      duration: const Duration(milliseconds: 1400),
     );
   }
 
@@ -43,27 +44,19 @@ class SignupRoleController extends GetxController with GetTickerProviderStateMix
     });
   }
 
-  void selectRole(int index) {
-    selectedRole.value = index;
-  }
-
-  void continueWithRole() {
-    final roleIndex = selectedRole.value;
-    if (roleIndex == -1) {
-      return;
-    }
-    if (roleIndex == 0) {
-      Get.toNamed(AppRoutes.studentSignup);
-      return;
-    }
-
-    Get.toNamed(AppRoutes.trainerSignup);
-  }
-
   @override
   void onClose() {
     iconController.dispose();
     contentController.dispose();
     super.onClose();
+  }
+
+  void continueToVerification() {
+    if (!isClosed) {
+      Get.toNamed(
+        AppRoutes.emailVerification,
+        arguments: {'email': 'trainer@email.com'},
+      );
+    }
   }
 }
