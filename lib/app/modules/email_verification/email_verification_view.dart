@@ -7,10 +7,10 @@ import 'package:get/get.dart';
 import '../../theme/app_colors.dart';
 import '../../widgets/brand_tile.dart';
 import '../../widgets/staggered_fade_slide.dart';
-import 'student_verification_controller.dart';
+import 'email_verification_controller.dart';
 
-class StudentVerificationView extends GetView<StudentVerificationController> {
-  const StudentVerificationView({super.key});
+class EmailVerificationView extends GetView<EmailVerificationController> {
+  const EmailVerificationView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -199,43 +199,27 @@ class StudentVerificationView extends GetView<StudentVerificationController> {
                                         textStyle: textTheme.titleMedium?.copyWith(
                                           fontWeight: FontWeight.w600,
                                         ),
-                                        elevation: 0,
                                       ),
                                       child: const Text('Verify Email'),
                                     ),
                                   ),
                                   const SizedBox(height: 18),
-                                  RichText(
-                                    textAlign: TextAlign.center,
-                                    text: TextSpan(
-                                      style: textTheme.bodyMedium?.copyWith(
-                                        color: AppColors.textSecondary,
-                                      ),
-                                      children: [
-                                        const TextSpan(
-                                          text: "Didn't receive the code? ",
-                                        ),
-                                        WidgetSpan(
-                                          alignment: PlaceholderAlignment.middle,
-                                          child: TextButton(
-                                            onPressed: controller.resendCode,
-                                            style: TextButton.styleFrom(
-                                              padding: EdgeInsets.zero,
-                                              minimumSize: const Size(0, 0),
-                                              tapTargetSize:
-                                                  MaterialTapTargetSize.shrinkWrap,
-                                              foregroundColor:
-                                                  AppColors.accentDeep,
-                                              textStyle:
-                                                  textTheme.bodyMedium?.copyWith(
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                            ),
-                                            child: const Text('Resend'),
-                                          ),
-                                        ),
-                                      ],
+                                  Text(
+                                    "Didn't receive the code?",
+                                    style: textTheme.bodyMedium?.copyWith(
+                                      color: AppColors.textSecondary,
                                     ),
+                                  ),
+                                  const SizedBox(height: 6),
+                                  TextButton(
+                                    onPressed: controller.resendCode,
+                                    style: TextButton.styleFrom(
+                                      foregroundColor: AppColors.accent,
+                                      textStyle: textTheme.bodyMedium?.copyWith(
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    child: const Text('Resend Code'),
                                   ),
                                 ],
                               ),
@@ -261,7 +245,7 @@ class _OtpDigitField extends StatelessWidget {
     required this.focusNode,
     required this.onChanged,
     required this.onSubmitted,
-    this.isLast = false,
+    required this.isLast,
   });
 
   final TextEditingController controller;
@@ -272,36 +256,45 @@ class _OtpDigitField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
     return SizedBox(
       width: 52,
       child: TextField(
         controller: controller,
         focusNode: focusNode,
-        keyboardType: TextInputType.number,
-        textAlign: TextAlign.center,
-        style: textTheme.titleLarge?.copyWith(
-          color: AppColors.textPrimary,
-          fontWeight: FontWeight.w600,
-        ),
-        cursorColor: AppColors.accent,
-        decoration: InputDecoration(
-          counterText: '',
-          filled: true,
-          fillColor: const Color(0xFFF7F4EE),
-          contentPadding: const EdgeInsets.symmetric(vertical: 16),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16),
-            borderSide: BorderSide.none,
-          ),
-        ),
         onChanged: onChanged,
         onSubmitted: (_) => onSubmitted(),
+        textAlign: TextAlign.center,
+        keyboardType: TextInputType.number,
         textInputAction: isLast ? TextInputAction.done : TextInputAction.next,
-        inputFormatters: const [
+        cursorColor: AppColors.accent,
+        inputFormatters: [
           FilteringTextInputFormatter.digitsOnly,
           LengthLimitingTextInputFormatter(1),
         ],
+        decoration: InputDecoration(
+          filled: true,
+          fillColor: const Color(0xFFF9F6F1),
+          contentPadding: const EdgeInsets.symmetric(vertical: 16),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(18),
+            borderSide: BorderSide(
+              color: AppColors.muted.withOpacity(0.35),
+            ),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(18),
+            borderSide: BorderSide(
+              color: AppColors.muted.withOpacity(0.3),
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(18),
+            borderSide: const BorderSide(
+              color: AppColors.accent,
+              width: 1.6,
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -324,13 +317,6 @@ class _BlurredCircle extends StatelessWidget {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: color,
-        boxShadow: [
-          BoxShadow(
-            color: color,
-            blurRadius: 60,
-            spreadRadius: 20,
-          ),
-        ],
       ),
     );
   }
