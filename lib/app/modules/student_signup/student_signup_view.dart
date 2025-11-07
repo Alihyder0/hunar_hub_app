@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 
 import '../../theme/app_colors.dart';
 import '../../widgets/brand_tile.dart';
+import '../../widgets/signup_field.dart';
 import '../../widgets/staggered_fade_slide.dart';
 import 'student_signup_controller.dart';
 
@@ -150,14 +151,14 @@ class StudentSignupView extends GetView<StudentSignupController> {
                                   Row(
                                     children: [
                                       Expanded(
-                                        child: _SignupField(
+                                        child: SignupField(
                                           label: 'First Name',
                                           hint: 'Enter your first name',
                                         ),
                                       ),
                                       SizedBox(width: 18),
                                       Expanded(
-                                        child: _SignupField(
+                                        child: SignupField(
                                           label: 'Last Name',
                                           hint: 'Enter your last name',
                                         ),
@@ -165,31 +166,31 @@ class StudentSignupView extends GetView<StudentSignupController> {
                                     ],
                                   ),
                                   SizedBox(height: 18),
-                                  _SignupField(
+                                  SignupField(
                                     label: 'Email Address',
                                     hint: 'you@example.com',
                                     keyboardType: TextInputType.emailAddress,
                                   ),
                                   SizedBox(height: 18),
-                                  _SignupField(
+                                  SignupField(
                                     label: 'Phone Number',
                                     hint: '+92 300 1234567',
                                     keyboardType: TextInputType.phone,
                                   ),
                                   SizedBox(height: 18),
-                                  _SignupField(
+                                  SignupField(
                                     label: 'Password',
                                     hint: 'Create a strong password',
                                     obscureText: true,
                                   ),
                                   SizedBox(height: 18),
-                                  _SignupField(
+                                  SignupField(
                                     label: 'Confirm Password',
                                     hint: 'Re-enter your password',
                                     obscureText: true,
                                   ),
                                   SizedBox(height: 18),
-                                  _SignupField(
+                                  SignupField(
                                     label: 'CNIC',
                                     hint: '12345-1234567-1',
                                     keyboardType: TextInputType.number,
@@ -198,14 +199,14 @@ class StudentSignupView extends GetView<StudentSignupController> {
                                   Row(
                                     children: [
                                       Expanded(
-                                        child: _SignupField(
+                                        child: SignupField(
                                           label: 'Date of Birth',
                                           hint: 'DD / MM / YYYY',
                                         ),
                                       ),
                                       SizedBox(width: 18),
                                       Expanded(
-                                        child: _SignupField(
+                                        child: SignupField(
                                           label: 'City',
                                           hint: 'Enter your city',
                                         ),
@@ -262,68 +263,6 @@ class StudentSignupView extends GetView<StudentSignupController> {
           ),
         ],
       ),
-    );
-  }
-}
-
-class _SignupField extends StatelessWidget {
-  const _SignupField({
-    required this.label,
-    required this.hint,
-    this.obscureText = false,
-    this.keyboardType,
-  });
-
-  final String label;
-  final String hint;
-  final bool obscureText;
-  final TextInputType? keyboardType;
-
-  @override
-  Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: textTheme.labelLarge?.copyWith(
-            color: AppColors.textPrimary,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        const SizedBox(height: 8),
-        TextField(
-          obscureText: obscureText,
-          keyboardType: keyboardType,
-          decoration: InputDecoration(
-            hintText: hint,
-            filled: true,
-            fillColor: const Color(0xFFF9F6F1),
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(22),
-              borderSide: BorderSide(
-                color: AppColors.muted.withOpacity(0.35),
-              ),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(22),
-              borderSide: BorderSide(
-                color: AppColors.muted.withOpacity(0.3),
-              ),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(22),
-              borderSide: const BorderSide(
-                color: AppColors.accent,
-                width: 1.4,
-              ),
-            ),
-          ),
-        ),
-      ],
     );
   }
 }
